@@ -1,0 +1,131 @@
+package fss.acquisition.merchantonboard.domain;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Entity
+@Table(name = "businessowner")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class BusinessOwner implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
+
+    @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @NotNull
+    @Column(name = "mobileno", nullable = false)
+    private String mobileno;
+
+    @NotNull
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @NotNull
+    @Column(name = "address", nullable = false)
+    private String address;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BusinessOwner id(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public BusinessOwner name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMobileno() {
+        return this.mobileno;
+    }
+
+    public BusinessOwner mobileno(String mobileno) {
+        this.mobileno = mobileno;
+        return this;
+    }
+
+    public void setMobileno(String mobileno) {
+        this.mobileno = mobileno;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public BusinessOwner email(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public BusinessOwner address(String address) {
+        this.address = address;
+        return this;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof BusinessOwner)) {
+            return false;
+        }
+        return id != null && id.equals(((BusinessOwner) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "BusinessOwner{" +
+                "id=" + getId() +
+                ", name='" + getName() + "'" +
+                ", mobileno='" + getMobileno() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", address='" + getAddress() + "'" +
+                "}";
+    }
+}
