@@ -35,9 +35,7 @@ public class BusinessContact implements Serializable {
     @Column(name = "contacttype")
     private Integer contacttype;
 
-    @JsonIgnoreProperties(value = { "businessContact" }, allowSetters = true)
-    @OneToOne(mappedBy = "businessContact")
-    private AadharDetails aadharDetails;
+
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
@@ -122,18 +120,7 @@ public class BusinessContact implements Serializable {
         this.contacttype = contacttype;
     }
 
-    public AadharDetails getAadharDetails() {
-        return this.aadharDetails;
-    }
 
-    public BusinessContact aadharDetails(AadharDetails aadharDetails) {
-        this.setAadharDetails(aadharDetails);
-        return this;
-    }
-
-    public void setAadharDetails(AadharDetails aadharDetails) {
-        this.aadharDetails = aadharDetails;
-    }
 
     public Business getBusiness() {
         return this.business;

@@ -19,8 +19,6 @@ public class AadharDetails implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "mid")
-    private UUID mid;
 
     @NotNull
     @Column(name = "aadharno", nullable = false)
@@ -39,8 +37,8 @@ public class AadharDetails implements Serializable {
 
     @OneToOne
     @JsonIgnoreProperties(value = {"aadharDetails","business"}, allowSetters = true)
-    @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
-    private BusinessContact businessContact;
+    @JoinColumn(unique = true)
+    private BusinessOwner businessOwner;
 
     public Long getId() {
         return id;
@@ -55,18 +53,7 @@ public class AadharDetails implements Serializable {
         return this;
     }
 
-    public UUID getMid() {
-        return this.mid;
-    }
 
-    public AadharDetails mid(UUID mid) {
-        this.mid = mid;
-        return this;
-    }
-
-    public void setMid(UUID mid) {
-        this.mid = mid;
-    }
 
     public UUID getAadharno() {
         return this.aadharno;
@@ -120,26 +107,26 @@ public class AadharDetails implements Serializable {
         this.status = status;
     }
 
-    public BusinessContact getBusinessContact() {
-        return this.businessContact;
+    public BusinessOwner getBusinessOwner() {
+        return this.businessOwner;
     }
 
-    public AadharDetails businessContact(BusinessContact businessContact) {
-        this.setBusinessContact(businessContact);
+    public AadharDetails businessOwner(BusinessOwner businessOwner) {
+        this.setBusinessOwner(businessOwner);
         return this;
     }
 
-    public void setBusinessContact(BusinessContact businessContact) {
-        if (this.businessContact != null) {
-            this.businessContact.setAadharDetails(null);
+    public void setBusinessOwner(BusinessOwner businessOwner) {
+        if (this.businessOwner != null) {
+            this.businessOwner.setAadharDetails(null);
         }
-        if (businessContact != null) {
-            businessContact.setAadharDetails(this);
+        if (businessOwner != null) {
+            businessOwner.setAadharDetails(this);
         }
-        this.businessContact = businessContact;
+        this.businessOwner = businessOwner;
     }
 
-    
+
 
     @Override
     public boolean equals(Object o) {
@@ -163,7 +150,6 @@ public class AadharDetails implements Serializable {
     public String toString() {
         return "AadharDetails{" +
                 "id=" + getId() +
-                ", mid='" + getMid() + "'" +
                 ", aadharno='" + getAadharno() + "'" +
                 ", aadhardoc='" + getAadhardoc() + "'" +
                 ", aadhardocContentType='" + getAadhardocContentType() + "'" +

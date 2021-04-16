@@ -72,6 +72,11 @@ public class Business implements Serializable {
     @JsonIgnoreProperties(value = { "business" }, allowSetters = true)
     private Set<BankAccount> bankAccounts = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "aadharDetails" }, allowSetters = true)
+    @JoinColumn(unique = true)
+    private BusinessOwner businessOwner;
+
     public Long getId() {
         return id;
     }
@@ -316,6 +321,13 @@ public class Business implements Serializable {
         this.bankAccounts = bankAccounts;
     }
 
+    public BusinessOwner getBusinessOwner() {
+        return businessOwner;
+    }
+
+    public void setBusinessOwner(BusinessOwner businessOwner) {
+        this.businessOwner = businessOwner;
+    }
 
     @Override
     public boolean equals(Object o) {

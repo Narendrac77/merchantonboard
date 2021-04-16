@@ -1,8 +1,12 @@
 package fss.acquisition.merchantonboard.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -34,6 +38,13 @@ public class BusinessOwner implements Serializable {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @JsonIgnoreProperties( allowSetters = true)
+    @OneToOne(mappedBy = "businessOwner")
+    private AadharDetails aadharDetails;
+
+    @OneToMany(mappedBy = "businessOwner")
+    @JsonIgnoreProperties(value = { "business" }, allowSetters = true)
+    private Set<Business> businesses = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -100,6 +111,19 @@ public class BusinessOwner implements Serializable {
         this.address = address;
     }
 
+    public AadharDetails getAadharDetails() {
+        return this.aadharDetails;
+    }
+
+    public BusinessOwner aadharDetails(AadharDetails aadharDetails) {
+        this.setAadharDetails(aadharDetails);
+        return this;
+    }
+
+    public void setAadharDetails(AadharDetails aadharDetails) {
+        this.aadharDetails = aadharDetails;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -115,6 +139,14 @@ public class BusinessOwner implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public Set<Business> getBusinesses() {
+        return businesses;
+    }
+
+    public void setBusinesses(Set<Business> businesses) {
+        this.businesses = businesses;
     }
 
     // prettier-ignore
