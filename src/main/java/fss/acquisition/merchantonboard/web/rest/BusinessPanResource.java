@@ -1,17 +1,16 @@
-/*
 package fss.acquisition.merchantonboard.web.rest;
 
-import com.fss.onboard.domain.BusinessPan;
-import com.fss.onboard.repository.BusinessPanRepository;
-import com.fss.onboard.web.rest.errors.BadRequestAlertException;
+import fss.acquisition.merchantonboard.domain.BusinessPan;
+import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
+import fss.acquisition.merchantonboard.service.BusinessPanService;
+import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,11 +19,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
-*/
-/**
- * REST controller for managing {@link com.fss.onboard.domain.BusinessPan}.
- *//*
 
 @RestController
 @RequestMapping("/api")
@@ -35,8 +31,8 @@ public class BusinessPanResource {
 
     private static final String ENTITY_NAME = "businessPan";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    @Autowired
+    BusinessPanService businessPanService;
 
     private final BusinessPanRepository businessPanRepository;
 
@@ -44,80 +40,26 @@ public class BusinessPanResource {
         this.businessPanRepository = businessPanRepository;
     }
 
-    */
-/**
-     * {@code POST  /business-pans} : Create a new businessPan.
-     *
-     * @param businessPan the businessPan to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new businessPan, or with status {@code 400 (Bad Request)} if the businessPan has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
-
     @PostMapping("/business-pans")
-    public ResponseEntity<BusinessPan> createBusinessPan(@Valid @RequestBody BusinessPan businessPan) throws URISyntaxException {
+    public String createBusinessPan(@Valid @RequestBody BusinessPan businessPan) throws ResourseNotFoundException {
         log.debug("REST request to save BusinessPan : {}", businessPan);
-        if (businessPan.getId() != null) {
-            throw new BadRequestAlertException("A new businessPan cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        BusinessPan result = businessPanRepository.save(businessPan);
-        return ResponseEntity
-            .created(new URI("/api/business-pans/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        businessPanService.createBusinessPan(businessPan);
+        return "Created Successfully";
     }
 
-    */
-/**
-     * {@code PUT  /business-pans/:id} : Updates an existing businessPan.
-     *
-     * @param id the id of the businessPan to save.
-     * @param businessPan the businessPan to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated businessPan,
-     * or with status {@code 400 (Bad Request)} if the businessPan is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the businessPan couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
-
-    @PutMapping("/business-pans/{id}")
-    public ResponseEntity<BusinessPan> updateBusinessPan(
-        @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody BusinessPan businessPan
-    ) throws URISyntaxException {
-        log.debug("REST request to update BusinessPan : {}, {}", id, businessPan);
-        if (businessPan.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, businessPan.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!businessPanRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        BusinessPan result = businessPanRepository.save(businessPan);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, businessPan.getId().toString()))
-            .body(result);
+    @PutMapping("/business-pans/{mid}")
+    public String updateBusinessPan(
+            @PathVariable(value = "mid", required = true) final UUID mid,
+            @Valid @RequestBody BusinessPan businessPan
+    ) throws ResourseNotFoundException {
+        businessPanService.updateBusinessPan(businessPan);
+        return "Businesspan Updated Successfully";
     }
 
-    */
-/**
-     * {@code PATCH  /business-pans/:id} : Partial updates given fields of an existing businessPan, field will ignore if it is null
-     *
-     * @param id the id of the businessPan to save.
-     * @param businessPan the businessPan to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated businessPan,
-     * or with status {@code 400 (Bad Request)} if the businessPan is not valid,
-     * or with status {@code 404 (Not Found)} if the businessPan is not found,
-     * or with status {@code 500 (Internal Server Error)} if the businessPan couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
-
-    @PatchMapping(value = "/business-pans/{id}", consumes = "application/merge-patch+json")
+/*
+    @PatchMapping(value = "/business-pans/{mid}", consumes = "application/merge-patch+json")
     public ResponseEntity<BusinessPan> partialUpdateBusinessPan(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = true) final String mid,
         @NotNull @RequestBody BusinessPan businessPan
     ) throws URISyntaxException {
         log.debug("REST request to partial update BusinessPan partially : {}, {}", id, businessPan);
@@ -158,14 +100,8 @@ public class BusinessPanResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, businessPan.getId().toString())
         );
-    }
+    }*/
 
-    */
-/**
-     * {@code GET  /business-pans} : get all the businessPans.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of businessPans in body.
-     *//*
 
     @GetMapping("/business-pans")
     public List<BusinessPan> getAllBusinessPans() {
@@ -173,37 +109,17 @@ public class BusinessPanResource {
         return businessPanRepository.findAll();
     }
 
-    */
-/**
-     * {@code GET  /business-pans/:id} : get the "id" businessPan.
-     *
-     * @param id the id of the businessPan to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the businessPan, or with status {@code 404 (Not Found)}.
-     *//*
-
-    @GetMapping("/business-pans/{id}")
-    public ResponseEntity<BusinessPan> getBusinessPan(@PathVariable Long id) {
-        log.debug("REST request to get BusinessPan : {}", id);
-        Optional<BusinessPan> businessPan = businessPanRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(businessPan);
+    @GetMapping("/business-pans/{mid}")
+    public BusinessPan getBusinessPan(@PathVariable UUID mid) throws ResourseNotFoundException {
+        log.debug("REST request to get BusinessPan : {}", mid);
+        return businessPanService.getBusinessPan(mid);
     }
 
-    */
-/**
-     * {@code DELETE  /business-pans/:id} : delete the "id" businessPan.
-     *
-     * @param id the id of the businessPan to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     *//*
 
-    @DeleteMapping("/business-pans/{id}")
-    public ResponseEntity<Void> deleteBusinessPan(@PathVariable Long id) {
-        log.debug("REST request to delete BusinessPan : {}", id);
-        businessPanRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+    @DeleteMapping("/business-pans/{mid}")
+    public String deleteBusinessPan(@PathVariable UUID mid) {
+        log.debug("REST request to delete BusinessPan : {}", mid);
+        businessPanRepository.deleteByMid(mid);
+        return "Deleted Successfully";
     }
 }
-*/

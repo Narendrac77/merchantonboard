@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "business_incoperation")
-public class BusinessIncoperation implements Serializable {
+public class BusinessIncorporation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +62,7 @@ public class BusinessIncoperation implements Serializable {
         this.id = id;
     }
 
-    public BusinessIncoperation id(Long id) {
+    public BusinessIncorporation id(Long id) {
         this.id = id;
         return this;
     }
@@ -71,7 +71,7 @@ public class BusinessIncoperation implements Serializable {
         return this.mid;
     }
 
-    public BusinessIncoperation mid(UUID mid) {
+    public BusinessIncorporation mid(UUID mid) {
         this.mid = mid;
         return this;
     }
@@ -84,7 +84,7 @@ public class BusinessIncoperation implements Serializable {
         return this.incorporationno;
     }
 
-    public BusinessIncoperation incorporationno(String incorporationno) {
+    public BusinessIncorporation incorporationno(String incorporationno) {
         this.incorporationno = incorporationno;
         return this;
     }
@@ -97,7 +97,7 @@ public class BusinessIncoperation implements Serializable {
         return this.businessregisteredaddress;
     }
 
-    public BusinessIncoperation businessregisteredaddress(String businessregisteredaddress) {
+    public BusinessIncorporation businessregisteredaddress(String businessregisteredaddress) {
         this.businessregisteredaddress = businessregisteredaddress;
         return this;
     }
@@ -110,7 +110,7 @@ public class BusinessIncoperation implements Serializable {
         return this.businesslegalname;
     }
 
-    public BusinessIncoperation businesslegalname(String businesslegalname) {
+    public BusinessIncorporation businesslegalname(String businesslegalname) {
         this.businesslegalname = businesslegalname;
         return this;
     }
@@ -123,7 +123,7 @@ public class BusinessIncoperation implements Serializable {
         return this.incorporationdoc;
     }
 
-    public BusinessIncoperation incorporationdoc(byte[] incorporationdoc) {
+    public BusinessIncorporation incorporationdoc(byte[] incorporationdoc) {
         this.incorporationdoc = incorporationdoc;
         return this;
     }
@@ -136,7 +136,7 @@ public class BusinessIncoperation implements Serializable {
         return this.incorporationdocContentType;
     }
 
-    public BusinessIncoperation incorporationdocContentType(String incorporationdocContentType) {
+    public BusinessIncorporation incorporationdocContentType(String incorporationdocContentType) {
         this.incorporationdocContentType = incorporationdocContentType;
         return this;
     }
@@ -149,7 +149,7 @@ public class BusinessIncoperation implements Serializable {
         return this.status;
     }
 
-    public BusinessIncoperation status(Status status) {
+    public BusinessIncorporation status(Status status) {
         this.status = status;
         return this;
     }
@@ -162,7 +162,7 @@ public class BusinessIncoperation implements Serializable {
         return this.gstinDeatils;
     }
 
-    public BusinessIncoperation gstinDeatils(GstinDeatils gstinDeatils) {
+    public BusinessIncorporation gstinDeatils(GstinDeatils gstinDeatils) {
         this.setGstinDeatils(gstinDeatils);
         return this;
     }
@@ -175,7 +175,7 @@ public class BusinessIncoperation implements Serializable {
         return this.business;
     }
 
-    public BusinessIncoperation business(Business business) {
+    public BusinessIncorporation business(Business business) {
         this.setBusiness(business);
         return this;
     }
@@ -196,10 +196,10 @@ public class BusinessIncoperation implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof BusinessIncoperation)) {
+        if (!(o instanceof BusinessIncorporation)) {
             return false;
         }
-        return id != null && id.equals(((BusinessIncoperation) o).id);
+        return id != null && id.equals(((BusinessIncorporation) o).id);
     }
 
     @Override

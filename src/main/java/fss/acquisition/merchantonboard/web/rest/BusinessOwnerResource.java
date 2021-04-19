@@ -1,17 +1,15 @@
-/*
 package fss.acquisition.merchantonboard.web.rest;
 
-import com.fss.onboard.domain.BusinessOwner;
-import com.fss.onboard.repository.BusinessOwnerRepository;
-import com.fss.onboard.web.rest.errors.BadRequestAlertException;
+import fss.acquisition.merchantonboard.domain.BusinessOwner;
+import fss.acquisition.merchantonboard.repository.BusinessOwnerRepository;
+import fss.acquisition.merchantonboard.web.rest.errors.GlobalExceptionHandler;
+import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -21,10 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-*/
-/**
- * REST controller for managing {@link com.fss.onboard.domain.BusinessOwner}.
- *//*
+
 
 @RestController
 @RequestMapping("/api")
@@ -35,7 +30,6 @@ public class BusinessOwnerResource {
 
     private static final String ENTITY_NAME = "businessOwner";
 
-    @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final BusinessOwnerRepository businessOwnerRepository;
@@ -44,78 +38,29 @@ public class BusinessOwnerResource {
         this.businessOwnerRepository = businessOwnerRepository;
     }
 
-    */
-/**
-     * {@code POST  /business-owners} : Create a new businessOwner.
-     *
-     * @param businessOwner the businessOwner to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new businessOwner, or with status {@code 400 (Bad Request)} if the businessOwner has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
+
 
     @PostMapping("/business-owners")
-    public ResponseEntity<BusinessOwner> createBusinessOwner(@Valid @RequestBody BusinessOwner businessOwner) throws URISyntaxException {
+    public String createBusinessOwner(@Valid @RequestBody BusinessOwner businessOwner)  {
         log.debug("REST request to save BusinessOwner : {}", businessOwner);
-        if (businessOwner.getId() != null) {
-            throw new BadRequestAlertException("A new businessOwner cannot already have an ID", ENTITY_NAME, "idexists");
-        }
         BusinessOwner result = businessOwnerRepository.save(businessOwner);
-        return ResponseEntity
-            .created(new URI("/api/business-owners/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return "Business Details has been created Successfully";
     }
 
-    */
-/**
-     * {@code PUT  /business-owners/:id} : Updates an existing businessOwner.
-     *
-     * @param id the id of the businessOwner to save.
-     * @param businessOwner the businessOwner to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated businessOwner,
-     * or with status {@code 400 (Bad Request)} if the businessOwner is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the businessOwner couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
 
-    @PutMapping("/business-owners/{id}")
-    public ResponseEntity<BusinessOwner> updateBusinessOwner(
-        @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody BusinessOwner businessOwner
-    ) throws URISyntaxException {
-        log.debug("REST request to update BusinessOwner : {}, {}", id, businessOwner);
-        if (businessOwner.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    @PutMapping("/business-owners/{mobileno}")
+    public String updateBusinessOwner(
+        @PathVariable(value = "mobileno", required = true) final String mobileno,
+        @Valid @RequestBody BusinessOwner businessOwner) throws ResourseNotFoundException {
+        log.debug("REST request to update BusinessOwner : {}, {}", mobileno, businessOwner);
+        if (!businessOwnerRepository.existsByMobileno(mobileno)) {
+            throw new ResourseNotFoundException("Entity not found for " + mobileno );
         }
-        if (!Objects.equals(id, businessOwner.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!businessOwnerRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         BusinessOwner result = businessOwnerRepository.save(businessOwner);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, businessOwner.getId().toString()))
-            .body(result);
+        return "Updated Successfully";
     }
 
-    */
-/**
-     * {@code PATCH  /business-owners/:id} : Partial updates given fields of an existing businessOwner, field will ignore if it is null
-     *
-     * @param id the id of the businessOwner to save.
-     * @param businessOwner the businessOwner to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated businessOwner,
-     * or with status {@code 400 (Bad Request)} if the businessOwner is not valid,
-     * or with status {@code 404 (Not Found)} if the businessOwner is not found,
-     * or with status {@code 500 (Internal Server Error)} if the businessOwner couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
-
-    @PatchMapping(value = "/business-owners/{id}", consumes = "application/merge-patch+json")
+    /*@PatchMapping(value = "/business-owners/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<BusinessOwner> partialUpdateBusinessOwner(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody BusinessOwner businessOwner
@@ -158,14 +103,9 @@ public class BusinessOwnerResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, businessOwner.getId().toString())
         );
-    }
+    }*/
 
-    */
-/**
-     * {@code GET  /business-owners} : get all the businessOwners.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of businessOwners in body.
-     *//*
+
 
     @GetMapping("/business-owners")
     public List<BusinessOwner> getAllBusinessOwners() {
@@ -173,37 +113,20 @@ public class BusinessOwnerResource {
         return businessOwnerRepository.findAll();
     }
 
-    */
-/**
-     * {@code GET  /business-owners/:id} : get the "id" businessOwner.
-     *
-     * @param id the id of the businessOwner to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the businessOwner, or with status {@code 404 (Not Found)}.
-     *//*
 
-    @GetMapping("/business-owners/{id}")
-    public ResponseEntity<BusinessOwner> getBusinessOwner(@PathVariable Long id) {
-        log.debug("REST request to get BusinessOwner : {}", id);
-        Optional<BusinessOwner> businessOwner = businessOwnerRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(businessOwner);
+
+    @GetMapping("/business-owners/{mobileno}")
+    public BusinessOwner getBusinessOwner(@PathVariable String mobileno) throws ResourseNotFoundException {
+        log.debug("REST request to get BusinessOwner : {}", mobileno);
+        Optional<BusinessOwner> businessOwner = Optional.ofNullable(businessOwnerRepository.findByMobileno(mobileno)
+                .orElseThrow(() -> new ResourseNotFoundException("Entity not found for " + mobileno)));
+        return businessOwner.get();
     }
 
-    */
-/**
-     * {@code DELETE  /business-owners/:id} : delete the "id" businessOwner.
-     *
-     * @param id the id of the businessOwner to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     *//*
-
-    @DeleteMapping("/business-owners/{id}")
-    public ResponseEntity<Void> deleteBusinessOwner(@PathVariable Long id) {
-        log.debug("REST request to delete BusinessOwner : {}", id);
-        businessOwnerRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+    @DeleteMapping("/business-owners/{mobileno}")
+    public String deleteBusinessOwner(@PathVariable String mobileno) {
+        log.debug("REST request to delete BusinessOwner : {}", mobileno);
+        businessOwnerRepository.deleteByMobileno(mobileno);
+        return "Deleted Successfully";
     }
 }
-*/

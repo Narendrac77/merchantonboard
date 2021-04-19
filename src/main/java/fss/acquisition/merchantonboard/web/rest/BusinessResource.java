@@ -1,17 +1,14 @@
 /*
 package fss.acquisition.merchantonboard.web.rest;
 
-import com.fss.onboard.domain.Business;
-import com.fss.onboard.repository.BusinessRepository;
-import com.fss.onboard.web.rest.errors.BadRequestAlertException;
+import fss.acquisition.merchantonboard.domain.Business;
+import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,10 +16,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-*/
-/**
- * REST controller for managing {@link com.fss.onboard.domain.Business}.
- *//*
 
 @RestController
 @RequestMapping("/api")
@@ -33,23 +26,14 @@ public class BusinessResource {
 
     private static final String ENTITY_NAME = "business";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
 
-    private final BusinessRepository businessRepository;
+    private BusinessRepository businessRepository;
 
     public BusinessResource(BusinessRepository businessRepository) {
         this.businessRepository = businessRepository;
     }
 
-    */
-/**
-     * {@code POST  /businesses} : Create a new business.
-     *
-     * @param business the business to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new business, or with status {@code 400 (Bad Request)} if the business has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
+
 
     @PostMapping("/businesses")
     public ResponseEntity<Business> createBusiness(@RequestBody Business business) throws URISyntaxException {
@@ -64,8 +48,7 @@ public class BusinessResource {
             .body(result);
     }
 
-    */
-/**
+*
      * {@code PUT  /businesses/:id} : Updates an existing business.
      *
      * @param id the id of the business to save.
@@ -74,7 +57,7 @@ public class BusinessResource {
      * or with status {@code 400 (Bad Request)} if the business is not valid,
      * or with status {@code 500 (Internal Server Error)} if the business couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
+
 
     @PutMapping("/businesses/{id}")
     public ResponseEntity<Business> updateBusiness(
@@ -100,8 +83,7 @@ public class BusinessResource {
             .body(result);
     }
 
-    */
-/**
+*
      * {@code PATCH  /businesses/:id} : Partial updates given fields of an existing business, field will ignore if it is null
      *
      * @param id the id of the business to save.
@@ -111,7 +93,7 @@ public class BusinessResource {
      * or with status {@code 404 (Not Found)} if the business is not found,
      * or with status {@code 500 (Internal Server Error)} if the business couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
-     *//*
+
 
     @PatchMapping(value = "/businesses/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<Business> partialUpdateBusiness(
@@ -179,12 +161,11 @@ public class BusinessResource {
         );
     }
 
-    */
-/**
+*
      * {@code GET  /businesses} : get all the businesses.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of businesses in body.
-     *//*
+
 
     @GetMapping("/businesses")
     public List<Business> getAllBusinesses() {
@@ -192,13 +173,12 @@ public class BusinessResource {
         return businessRepository.findAll();
     }
 
-    */
-/**
+*
      * {@code GET  /businesses/:id} : get the "id" business.
      *
      * @param id the id of the business to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the business, or with status {@code 404 (Not Found)}.
-     *//*
+
 
     @GetMapping("/businesses/{id}")
     public ResponseEntity<Business> getBusiness(@PathVariable Long id) {
@@ -207,13 +187,12 @@ public class BusinessResource {
         return ResponseUtil.wrapOrNotFound(business);
     }
 
-    */
-/**
+*
      * {@code DELETE  /businesses/:id} : delete the "id" business.
      *
      * @param id the id of the business to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     *//*
+
 
     @DeleteMapping("/businesses/{id}")
     public ResponseEntity<Void> deleteBusiness(@PathVariable Long id) {

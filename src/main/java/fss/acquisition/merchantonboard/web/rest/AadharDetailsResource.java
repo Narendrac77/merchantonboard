@@ -34,19 +34,10 @@ public class AadharDetailsResource {
         this.aadharDetailsRepository = aadharDetailsRepository;
     }
 
-    /**
-     * {@code POST  /aadhar-details} : Create a new aadharDetails.
-     *
-     * @param aadharDetails the aadharDetails to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new aadharDetails, or with status {@code 400 (Bad Request)} if the aadharDetails has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
+
     @PostMapping("/aadhar-details")
     public String createAadharDetails(@Valid @RequestBody AadharDetails aadharDetails) throws URISyntaxException, ResourseNotFoundException {
         log.debug("REST request to save AadharDetails : {}", aadharDetails);
-        if (aadharDetails.getId() != null) {
-            throw new ResourseNotFoundException("A new aadharDetails cannot already have an ID ENTITY_NAME");
-        }
         AadharDetails result = aadharDetailsRepository.save(aadharDetails);
         return "";
     }
@@ -84,7 +75,7 @@ public class AadharDetailsResource {
      * or with status {@code 500 (Internal Server Error)} if the aadharDetails couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/aadhar-details/{id}", consumes = "application/merge-patch+json")
+   /* @PatchMapping(value = "/aadhar-details/{id}", consumes = "application/merge-patch+json")
     public String partialUpdateAadharDetails(
             @PathVariable(value = "id", required = false) final Long id,
             @NotNull @RequestBody AadharDetails aadharDetails
@@ -115,7 +106,7 @@ public class AadharDetailsResource {
                 .map(aadharDetailsRepository::save);
 
         return null;
-    }
+    }*/
 
     /**
      * {@code GET  /aadhar-details} : get all the aadharDetails.

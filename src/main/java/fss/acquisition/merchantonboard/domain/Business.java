@@ -62,7 +62,7 @@ public class Business implements Serializable {
 
     @JsonIgnoreProperties(value = { "gstinDeatils", "business" }, allowSetters = true)
     @OneToOne(mappedBy = "business")
-    private BusinessIncoperation businessIncoperation;
+    private BusinessIncorporation businessIncorporation;
 
     @OneToMany(mappedBy = "business")
     @JsonIgnoreProperties(value = { "aadharDetails", "business" }, allowSetters = true)
@@ -246,17 +246,17 @@ public class Business implements Serializable {
         this.businessPan = businessPan;
     }
 
-    public BusinessIncoperation getBusinessIncoperation() {
-        return this.businessIncoperation;
+    public BusinessIncorporation getBusinessIncoperation() {
+        return this.businessIncorporation;
     }
 
-    public Business businessIncoperation(BusinessIncoperation businessIncoperation) {
-        this.setBusinessIncoperation(businessIncoperation);
+    public Business businessIncoperation(BusinessIncorporation businessIncorporation) {
+        this.setBusinessIncoperation(businessIncorporation);
         return this;
     }
 
-    public void setBusinessIncoperation(BusinessIncoperation businessIncoperation) {
-        this.businessIncoperation = businessIncoperation;
+    public void setBusinessIncoperation(BusinessIncorporation businessIncorporation) {
+        this.businessIncorporation = businessIncorporation;
     }
 
     public Set<BusinessContact> getBusinessContacts() {

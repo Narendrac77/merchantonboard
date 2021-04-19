@@ -43,7 +43,7 @@ public class GstinDeatils implements Serializable {
     @JsonIgnoreProperties(value = { "gstinDeatils", "business" }, allowSetters = true)
     @OneToOne
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
-    private BusinessIncoperation businessIncoperation;
+    private BusinessIncorporation businessIncorporation;
 
     public Long getId() {
         return id;
@@ -59,6 +59,7 @@ public class GstinDeatils implements Serializable {
     }
 
     public UUID getMid() {
+
         return this.mid;
     }
 
@@ -123,23 +124,23 @@ public class GstinDeatils implements Serializable {
         this.status = status;
     }
 
-    public BusinessIncoperation getBusinessIncoperation() {
-        return this.businessIncoperation;
+    public BusinessIncorporation getBusinessIncoperation() {
+        return this.businessIncorporation;
     }
 
-    public GstinDeatils businessIncoperation(BusinessIncoperation businessIncoperation) {
-        this.setBusinessIncoperation(businessIncoperation);
+    public GstinDeatils businessIncoperation(BusinessIncorporation businessIncorporation) {
+        this.setBusinessIncoperation(businessIncorporation);
         return this;
     }
 
-    public void setBusinessIncoperation(BusinessIncoperation businessIncoperation) {
-        if (this.businessIncoperation != null) {
-            this.businessIncoperation.setGstinDeatils(null);
+    public void setBusinessIncoperation(BusinessIncorporation businessIncorporation) {
+        if (this.businessIncorporation != null) {
+            this.businessIncorporation.setGstinDeatils(null);
         }
-        if (businessIncoperation != null) {
-            businessIncoperation.setGstinDeatils(this);
+        if (businessIncorporation != null) {
+            businessIncorporation.setGstinDeatils(this);
         }
-        this.businessIncoperation = businessIncoperation;
+        this.businessIncorporation = businessIncorporation;
     }
 
 
