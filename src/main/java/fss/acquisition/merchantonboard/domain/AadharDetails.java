@@ -24,6 +24,10 @@ public class AadharDetails implements Serializable {
     @Column(name = "aadharno", nullable = false)
     private UUID aadharno;
 
+    @NotNull
+    @Column(name = "businessid", nullable = false,unique = true)
+    private Long businessid;
+
     @Lob
     @Column(name = "aadhardoc", nullable = false)
     private byte[] aadhardoc;
@@ -37,7 +41,7 @@ public class AadharDetails implements Serializable {
 
     @OneToOne
     @JsonIgnoreProperties(value = {"aadharDetails","business"}, allowSetters = true)
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
     private BusinessOwner businessOwner;
 
     public Long getId() {
@@ -77,6 +81,14 @@ public class AadharDetails implements Serializable {
         return this;
     }
 
+    public Long getBusinessid() {
+        return businessid;
+    }
+
+    public void setBusinessid(Long businessid) {
+        this.businessid = businessid;
+    }
+
     public void setAadhardoc(byte[] aadhardoc) {
         this.aadhardoc = aadhardoc;
     }
@@ -102,6 +114,7 @@ public class AadharDetails implements Serializable {
         this.status = status;
         return this;
     }
+
 
     public void setStatus(Status status) {
         this.status = status;

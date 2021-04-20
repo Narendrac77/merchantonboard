@@ -2,11 +2,13 @@ package fss.acquisition.merchantonboard.web.rest;
 
 import fss.acquisition.merchantonboard.domain.AadharDetails;
 import fss.acquisition.merchantonboard.repository.AadharDetailsRepository;
+import fss.acquisition.merchantonboard.service.AadharService;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.apache.tomcat.util.http.HeaderUtil;
 import org.apache.tomcat.util.http.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,8 @@ public class AadharDetailsResource {
 
     private static final String ENTITY_NAME = "aadharDetails";
 
+    @Autowired
+    AadharService aadharService;
 
     private final AadharDetailsRepository aadharDetailsRepository;
 
@@ -38,8 +42,8 @@ public class AadharDetailsResource {
     @PostMapping("/aadhar-details")
     public String createAadharDetails(@Valid @RequestBody AadharDetails aadharDetails) throws URISyntaxException, ResourseNotFoundException {
         log.debug("REST request to save AadharDetails : {}", aadharDetails);
-        AadharDetails result = aadharDetailsRepository.save(aadharDetails);
-        return "";
+        aadharService.createAadharDetails(aadharDetails);
+        return "Created Successfully";
     }
 
     /**
@@ -56,12 +60,9 @@ public class AadharDetailsResource {
     public String updateAadharDetails(
             @PathVariable(value = "id", required = false) final Long id,
             @Valid @RequestBody AadharDetails aadharDetails
-    ) throws URISyntaxException {
-        log.debug("REST request to update AadharDetails : {}, {}", id, aadharDetails);
-
-
-        AadharDetails result = aadharDetailsRepository.save(aadharDetails);
-        return "";
+    ) throws ResourseNotFoundException {
+        aadharService.updateAadharDetails(aadharDetails);
+        return "Updated Successfully";
     }
 
     /**
@@ -108,40 +109,24 @@ public class AadharDetailsResource {
         return null;
     }*/
 
-    /**
-     * {@code GET  /aadhar-details} : get all the aadharDetails.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aadharDetails in body.
-     */
     @GetMapping("/aadhar-details")
     public List<AadharDetails> getAllAadharDetails() {
         log.debug("REST request to get all AadharDetails");
          return  aadharDetailsRepository.findAll();
     }
 
-    /**
-     * {@code GET  /aadhar-details/:id} : get the "id" aadharDetails.
-     *
-     * @param id the id of the aadharDetails to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the aadharDetails, or with status {@code 404 (Not Found)}.
-     */
+
     @GetMapping("/aadhar-details/{id}")
-    public AadharDetails getAadharDetails(@PathVariable Long id) {
+    public AadharDetails getAadharDetails(@PathVariable Long id) throws ResourseNotFoundException {
         log.debug("REST request to get AadharDetails : {}", id);
-        Optional<AadharDetails> aadharDetails = aadharDetailsRepository.findById(id);
-        return aadharDetails.get();
+        return aadharService.getAadharDetailsById(id);
     }
 
-    /**
-     * {@code DELETE  /aadhar-details/:id} : delete the "id" aadharDetails.
-     *
-     * @param id the id of the aadharDetails to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
+
     @DeleteMapping("/aadhar-details/{id}")
     public String deleteAadharDetails(@PathVariable Long id) {
         log.debug("REST request to delete AadharDetails : {}", id);
-        aadharDetailsRepository.deleteById(id);
+        aadharDetailsRepository.deleteBybusinessid(id);
         return "";
     }
 }

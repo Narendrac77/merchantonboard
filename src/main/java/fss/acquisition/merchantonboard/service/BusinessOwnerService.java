@@ -53,4 +53,10 @@ public class BusinessOwnerService {
         return businessOwner;
     }
 
+    public BusinessOwner getBusinessOwnerbyId(Long id) throws ResourseNotFoundException {
+        BusinessOwner businessOwner = businessOwnerRepository.findById(id)
+                .orElseThrow(() -> new ResourseNotFoundException("No resource found for this id"));
+    return  businessOwner;
+    }
+
 }

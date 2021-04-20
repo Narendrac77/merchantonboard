@@ -22,6 +22,10 @@ public class Business implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "businessid",unique = true)
+    private Long businessid;
+
+
     @Column(name = "displayname")
     private String displayname;
 
@@ -74,7 +78,7 @@ public class Business implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "aadharDetails" }, allowSetters = true)
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
     private BusinessOwner businessOwner;
 
     public Long getId() {
@@ -231,6 +235,14 @@ public class Business implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Long getBusinessid() {
+        return businessid;
+    }
+
+    public void setBusinessid(Long businessid) {
+        this.businessid = businessid;
     }
 
     public BusinessPan getBusinessPan() {

@@ -16,4 +16,8 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
 
     Optional<Business> findByMid(UUID mid);
 
+    Optional<Business> findByBusinessid(Long id);
+
+    void deleteByBusinessid(Long id);
+
 }

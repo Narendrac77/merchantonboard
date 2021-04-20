@@ -1,10 +1,12 @@
-/*
 package fss.acquisition.merchantonboard.web.rest;
 
 import fss.acquisition.merchantonboard.domain.Business;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
+import fss.acquisition.merchantonboard.service.BusinessService;
+import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ public class BusinessResource {
 
     private static final String ENTITY_NAME = "business";
 
+    @Autowired
+    BusinessService businessService;
 
     private BusinessRepository businessRepository;
 
@@ -36,66 +40,26 @@ public class BusinessResource {
 
 
     @PostMapping("/businesses")
-    public ResponseEntity<Business> createBusiness(@RequestBody Business business) throws URISyntaxException {
+    public String createBusiness(@RequestBody Business business) throws  ResourseNotFoundException {
         log.debug("REST request to save Business : {}", business);
-        if (business.getId() != null) {
-            throw new BadRequestAlertException("A new business cannot already have an ID", ENTITY_NAME, "idexists");
+        businessService.createBusiness(business);
+        return "Created Successfully";
         }
-        Business result = businessRepository.save(business);
-        return ResponseEntity
-            .created(new URI("/api/businesses/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-*
-     * {@code PUT  /businesses/:id} : Updates an existing business.
-     *
-     * @param id the id of the business to save.
-     * @param business the business to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated business,
-     * or with status {@code 400 (Bad Request)} if the business is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the business couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-
 
     @PutMapping("/businesses/{id}")
-    public ResponseEntity<Business> updateBusiness(
+    public String updateBusiness(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Business business
-    ) throws URISyntaxException {
+    ) throws ResourseNotFoundException {
         log.debug("REST request to update Business : {}, {}", id, business);
-        if (business.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, business.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
+        businessService.updateBusiness(business);
+        return "Business Updated Successfully";
 
-        if (!businessRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Business result = businessRepository.save(business);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, business.getId().toString()))
-            .body(result);
     }
 
-*
-     * {@code PATCH  /businesses/:id} : Partial updates given fields of an existing business, field will ignore if it is null
-     *
-     * @param id the id of the business to save.
-     * @param business the business to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated business,
-     * or with status {@code 400 (Bad Request)} if the business is not valid,
-     * or with status {@code 404 (Not Found)} if the business is not found,
-     * or with status {@code 500 (Internal Server Error)} if the business couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
 
 
-    @PatchMapping(value = "/businesses/{id}", consumes = "application/merge-patch+json")
+  /*  @PatchMapping(value = "/businesses/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<Business> partialUpdateBusiness(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Business business
@@ -159,12 +123,7 @@ public class BusinessResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, business.getId().toString())
         );
-    }
-
-*
-     * {@code GET  /businesses} : get all the businesses.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of businesses in body.
+    }*/
 
 
     @GetMapping("/businesses")
@@ -172,36 +131,17 @@ public class BusinessResource {
         log.debug("REST request to get all Businesses");
         return businessRepository.findAll();
     }
-
-*
-     * {@code GET  /businesses/:id} : get the "id" business.
-     *
-     * @param id the id of the business to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the business, or with status {@code 404 (Not Found)}.
-
-
     @GetMapping("/businesses/{id}")
-    public ResponseEntity<Business> getBusiness(@PathVariable Long id) {
+    public Business getBusiness(@PathVariable Long id) throws ResourseNotFoundException {
         log.debug("REST request to get Business : {}", id);
-        Optional<Business> business = businessRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(business);
+        return  businessService.getbusiness(id);
+
     }
 
-*
-     * {@code DELETE  /businesses/:id} : delete the "id" business.
-     *
-     * @param id the id of the business to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-
-
-    @DeleteMapping("/businesses/{id}")
-    public ResponseEntity<Void> deleteBusiness(@PathVariable Long id) {
+  @DeleteMapping("/businesses/{id}")
+    public String deleteBusiness(@PathVariable Long id) {
         log.debug("REST request to delete Business : {}", id);
-        businessRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        businessRepository.deleteByBusinessid(id);
+        return "Deleted Successfully";
     }
 }
-*/
