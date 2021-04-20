@@ -10,7 +10,6 @@ import java.util.Optional;
 /**
  * Spring Data SQL repository for the AadharDetails entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AadharDetailsRepository extends JpaRepository<AadharDetails, Long> {
 

@@ -6,10 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Spring Data SQL repository for the BusinessOwner entity.
- */
-@SuppressWarnings("unused")
 @Repository
 public interface BusinessOwnerRepository extends JpaRepository<BusinessOwner, Long> {
 

@@ -7,10 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Spring Data SQL repository for the GstinDeatils entity.
- */
-@SuppressWarnings("unused")
 @Repository
 public interface GstinDeatilsRepository extends JpaRepository<GstinDeatils, Long> {
 

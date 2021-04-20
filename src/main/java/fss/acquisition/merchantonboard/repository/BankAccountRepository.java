@@ -7,10 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Spring Data SQL repository for the BankAccount entity.
- */
-@SuppressWarnings("unused")
+
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
