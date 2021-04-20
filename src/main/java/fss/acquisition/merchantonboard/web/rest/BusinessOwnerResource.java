@@ -2,10 +2,12 @@ package fss.acquisition.merchantonboard.web.rest;
 
 import fss.acquisition.merchantonboard.domain.BusinessOwner;
 import fss.acquisition.merchantonboard.repository.BusinessOwnerRepository;
+import fss.acquisition.merchantonboard.service.BusinessOwnerService;
 import fss.acquisition.merchantonboard.web.rest.errors.GlobalExceptionHandler;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -30,7 +32,8 @@ public class BusinessOwnerResource {
 
     private static final String ENTITY_NAME = "businessOwner";
 
-    private String applicationName;
+    @Autowired
+    BusinessOwnerService businessOwnerService;
 
     private final BusinessOwnerRepository businessOwnerRepository;
 
@@ -41,9 +44,9 @@ public class BusinessOwnerResource {
 
 
     @PostMapping("/business-owners")
-    public String createBusinessOwner(@Valid @RequestBody BusinessOwner businessOwner)  {
+    public String createBusinessOwner(@Valid @RequestBody BusinessOwner businessOwner) throws ResourseNotFoundException {
         log.debug("REST request to save BusinessOwner : {}", businessOwner);
-        BusinessOwner result = businessOwnerRepository.save(businessOwner);
+        businessOwnerService.createBusinessOwner(businessOwner);
         return "Business Details has been created Successfully";
     }
 
@@ -53,10 +56,7 @@ public class BusinessOwnerResource {
         @PathVariable(value = "mobileno", required = true) final String mobileno,
         @Valid @RequestBody BusinessOwner businessOwner) throws ResourseNotFoundException {
         log.debug("REST request to update BusinessOwner : {}, {}", mobileno, businessOwner);
-        if (!businessOwnerRepository.existsByMobileno(mobileno)) {
-            throw new ResourseNotFoundException("Entity not found for " + mobileno );
-        }
-        BusinessOwner result = businessOwnerRepository.save(businessOwner);
+        businessOwnerService.updateBusinessOwner(businessOwner);
         return "Updated Successfully";
     }
 
@@ -118,9 +118,7 @@ public class BusinessOwnerResource {
     @GetMapping("/business-owners/{mobileno}")
     public BusinessOwner getBusinessOwner(@PathVariable String mobileno) throws ResourseNotFoundException {
         log.debug("REST request to get BusinessOwner : {}", mobileno);
-        Optional<BusinessOwner> businessOwner = Optional.ofNullable(businessOwnerRepository.findByMobileno(mobileno)
-                .orElseThrow(() -> new ResourseNotFoundException("Entity not found for " + mobileno)));
-        return businessOwner.get();
+        return businessOwnerService.getBusinessOwner(mobileno);
     }
 
     @DeleteMapping("/business-owners/{mobileno}")

@@ -45,12 +45,12 @@ public class BusinessIncorporation implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonIgnoreProperties(value = { "businessIncoperation" }, allowSetters = true)
-    @OneToOne(mappedBy = "businessIncoperation")
+    @JsonIgnoreProperties(value = { "businessIncorporation" }, allowSetters = true)
+    @OneToOne(mappedBy = "businessIncorporation")
     private GstinDeatils gstinDeatils;
 
     @OneToOne
-    @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "businessPan", "businessIncorporation", "businessContacts", "bankAccounts" }, allowSetters = true)
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 
