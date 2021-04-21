@@ -1,11 +1,14 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 
+import fss.acquisition.merchantonboard.dao.enumeration.RiskEnum;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -22,7 +25,7 @@ public class Business implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "businessid",unique = true)
+    @Column(name = "businessid")
     private Long businessid;
 
 
@@ -41,20 +44,21 @@ public class Business implements Serializable {
     @Column(name = "communicationaddress")
     private String communicationaddress;
 
-    @Column(name = "wesiteurl")
-    private String wesiteurl;
+    @Column(name = "websiteurl")
+    private String websiteurl;
 
     @Column(name = "age")
     private Integer age;
 
     @Column(name = "turnover")
-    private Integer turnover;
+    private BigInteger turnover;
 
-    @Column(name = "mid")
+    @Column(name = "mid",unique = true)
     private UUID mid;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "riskscoring")
-    private Integer riskscoring;
+    private RiskEnum riskscoring;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -77,7 +81,8 @@ public class Business implements Serializable {
     private Set<BankAccount> bankAccounts = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "aadharDetails" }, allowSetters = true)
+   // @JsonIgnoreProperties(value = { "aadharDetails" }, allowSetters = true)
+    @JsonIgnore
     @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
     private BusinessOwner businessOwner;
 
@@ -159,17 +164,17 @@ public class Business implements Serializable {
         this.communicationaddress = communicationaddress;
     }
 
-    public String getWesiteurl() {
-        return this.wesiteurl;
+    public String getWebsiteurl() {
+        return this.websiteurl;
     }
 
     public Business wesiteurl(String wesiteurl) {
-        this.wesiteurl = wesiteurl;
+        this.websiteurl = wesiteurl;
         return this;
     }
 
-    public void setWesiteurl(String wesiteurl) {
-        this.wesiteurl = wesiteurl;
+    public void setWebsiteurl(String websiteurl) {
+        this.websiteurl = websiteurl;
     }
 
     public Integer getAge() {
@@ -185,16 +190,16 @@ public class Business implements Serializable {
         this.age = age;
     }
 
-    public Integer getTurnover() {
+    public BigInteger getTurnover() {
         return this.turnover;
     }
 
-    public Business turnover(Integer turnover) {
+    public Business turnover(BigInteger turnover) {
         this.turnover = turnover;
         return this;
     }
 
-    public void setTurnover(Integer turnover) {
+    public void setTurnover(BigInteger turnover) {
         this.turnover = turnover;
     }
 
@@ -211,16 +216,16 @@ public class Business implements Serializable {
         this.mid = mid;
     }
 
-    public Integer getRiskscoring() {
+    public RiskEnum getRiskscoring() {
         return this.riskscoring;
     }
 
-    public Business riskscoring(Integer riskscoring) {
+    public Business riskscoring(RiskEnum riskscoring) {
         this.riskscoring = riskscoring;
         return this;
     }
 
-    public void setRiskscoring(Integer riskscoring) {
+    public void setRiskscoring(RiskEnum riskscoring) {
         this.riskscoring = riskscoring;
     }
 
@@ -368,7 +373,7 @@ public class Business implements Serializable {
                 ", businesscategory='" + getBusinesscategory() + "'" +
                 ", businesssubcategory='" + getBusinesssubcategory() + "'" +
                 ", communicationaddress='" + getCommunicationaddress() + "'" +
-                ", wesiteurl='" + getWesiteurl() + "'" +
+                ", wesiteurl='" + getWebsiteurl() + "'" +
                 ", age=" + getAge() +
                 ", turnover=" + getTurnover() +
                 ", mid='" + getMid() + "'" +

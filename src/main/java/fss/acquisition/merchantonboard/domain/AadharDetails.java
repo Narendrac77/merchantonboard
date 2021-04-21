@@ -1,5 +1,6 @@
 package fss.acquisition.merchantonboard.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 
@@ -29,7 +30,7 @@ public class AadharDetails implements Serializable {
     private Long businessid;
 
     @Lob
-    @Column(name = "aadhardoc", nullable = false)
+    @Column(name = "aadhardoc")
     private byte[] aadhardoc;
 
     @Column(name = "aadhardoc_content_type", nullable = false)
@@ -40,7 +41,8 @@ public class AadharDetails implements Serializable {
     private Status status;
 
     @OneToOne
-    @JsonIgnoreProperties(value = {"aadharDetails","business"}, allowSetters = true)
+   // @JsonIgnoreProperties(value = {"aadharDetails","business"}, allowSetters = true)
+    @JsonIgnore
     @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
     private BusinessOwner businessOwner;
 

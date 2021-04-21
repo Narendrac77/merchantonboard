@@ -16,4 +16,5 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
 
     void deleteByBusinessid(Long id);
 
-}
+    boolean existsByDisplayname(String displayName);
+    }

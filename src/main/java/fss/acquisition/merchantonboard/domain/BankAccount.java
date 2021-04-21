@@ -1,4 +1,5 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.UUID;
@@ -46,7 +47,8 @@ public class BankAccount implements Serializable {
     private Status status;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
+    //@JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
+    @JsonIgnore
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 

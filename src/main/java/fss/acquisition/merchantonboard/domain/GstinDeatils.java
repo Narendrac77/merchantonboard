@@ -1,4 +1,5 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public class GstinDeatils implements Serializable {
     private String gstinno;
 
     @Lob
-    @Column(name = "gstindoc", nullable = false)
+    @Column(name = "gstindoc")
     private byte[] gstindoc;
 
     @Column(name = "gstindoc_content_type", nullable = false)
@@ -40,7 +41,8 @@ public class GstinDeatils implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonIgnoreProperties(value = { "gstinDeatils", "business" }, allowSetters = true)
+    //@JsonIgnoreProperties(value = { "gstinDeatils", "business" }, allowSetters = true)
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private BusinessIncorporation businessIncorporation;

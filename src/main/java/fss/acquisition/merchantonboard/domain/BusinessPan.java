@@ -1,4 +1,5 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class BusinessPan implements Serializable {
     private String panno;
 
     @Lob
-    @Column(name = "pandoc", nullable = false)
+    @Column(name = "pandoc")
     private byte[] pandoc;
 
     @Column(name = "pandoc_content_type", nullable = false)
@@ -40,8 +41,9 @@ public class BusinessPan implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
+   // @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 

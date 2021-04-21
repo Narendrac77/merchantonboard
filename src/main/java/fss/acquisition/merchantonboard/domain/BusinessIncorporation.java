@@ -1,4 +1,5 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 
@@ -35,7 +36,7 @@ public class BusinessIncorporation implements Serializable {
     private String businesslegalname;
 
     @Lob
-    @Column(name = "incorporationdoc", nullable = false)
+    @Column(name = "incorporationdoc")
     private byte[] incorporationdoc;
 
     @Column(name = "incorporationdoc_content_type", nullable = false)
@@ -45,12 +46,13 @@ public class BusinessIncorporation implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonIgnoreProperties(value = { "businessIncorporation" }, allowSetters = true)
+    @JsonIgnoreProperties(allowSetters = true)
     @OneToOne(mappedBy = "businessIncorporation")
     private GstinDeatils gstinDeatils;
 
     @OneToOne
-    @JsonIgnoreProperties(value = { "businessPan", "businessIncorporation", "businessContacts", "bankAccounts" }, allowSetters = true)
+    //@JsonIgnoreProperties(value = { "businessPan", "businessIncorporation", "businessContacts", "bankAccounts","businessOwner" }, allowSetters = true)
+    @JsonIgnore
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 

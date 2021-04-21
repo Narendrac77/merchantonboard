@@ -1,17 +1,18 @@
 DROP TABLE IF EXISTS categories CASCADE;
 
 CREATE TABLE categories (
-  categorieid  INTEGER PRIMARY KEY,
-  description VARCHAR(255) NOT NULL);
+  id  INTEGER UNIQUE,
+  description VARCHAR(255) NOT NULL,
+   mcccode INTEGER);
 
-DROP TABLE IF EXISTS sub_categories;
+DROP TABLE IF EXISTS subcategories;
 
- CREATE TABLE sub_categories (
-  subCategorieId  INTEGER PRIMARY KEY,
+ CREATE TABLE subcategories (
+  id  INTEGER,
   description VARCHAR(255) NOT NULL,
   categorieid  INTEGER,
-  merchantCategorie INTEGER NOT NULL,
-  FOREIGN KEY (categorieid) REFERENCES categories(categorieid));
+  merchantcategorie INTEGER NOT NULL,
+  FOREIGN KEY (categorieid) REFERENCES categories(id));
 
 DROP TABLE IF EXISTS panverification;
 

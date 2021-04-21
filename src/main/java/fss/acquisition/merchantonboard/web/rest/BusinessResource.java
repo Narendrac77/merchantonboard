@@ -1,5 +1,6 @@
 package fss.acquisition.merchantonboard.web.rest;
 
+import fss.acquisition.merchantonboard.dao.BusinessDao;
 import fss.acquisition.merchantonboard.domain.Business;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.service.BusinessService;
@@ -40,20 +41,20 @@ public class BusinessResource {
 
 
     @PostMapping("/businesses")
-    public String createBusiness(@RequestBody Business business) throws  ResourseNotFoundException {
+    public BusinessDao createBusiness(@RequestBody Business business) throws Exception {
         log.debug("REST request to save Business : {}", business);
-        businessService.createBusiness(business);
-        return "Created Successfully";
+        BusinessDao businessDao = businessService.createBusiness(business);
+        return businessDao;
         }
 
     @PutMapping("/businesses/{id}")
-    public String updateBusiness(
+    public BusinessDao updateBusiness(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Business business
     ) throws ResourseNotFoundException {
         log.debug("REST request to update Business : {}, {}", id, business);
-        businessService.updateBusiness(business);
-        return "Business Updated Successfully";
+        BusinessDao businessDao = businessService.updateBusiness(business);
+        return businessDao ;
 
     }
 
