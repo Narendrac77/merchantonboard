@@ -15,6 +15,7 @@ public class BusinessIncorporation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -42,6 +43,7 @@ public class BusinessIncorporation implements Serializable {
     @Column(name = "incorporationdoc_content_type", nullable = false)
     private String incorporationdocContentType;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;

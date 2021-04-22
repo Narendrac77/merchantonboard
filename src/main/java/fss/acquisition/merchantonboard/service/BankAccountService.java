@@ -2,9 +2,13 @@ package fss.acquisition.merchantonboard.service;
 
 import fss.acquisition.merchantonboard.domain.BankAccount;
 import fss.acquisition.merchantonboard.domain.Business;
+import fss.acquisition.merchantonboard.domain.BusinessPan;
+import fss.acquisition.merchantonboard.domain.GstinDeatils;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.verification.Bankverification;
 import fss.acquisition.merchantonboard.repository.BankAccountRepository;
+import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
+import fss.acquisition.merchantonboard.repository.GstinDeatilsRepository;
 import fss.acquisition.merchantonboard.repository.verification.BankverificationRepository;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
@@ -30,23 +34,40 @@ public class BankAccountService {
     @Autowired
     BankverificationRepository bankverificationRepository;
 
-    public boolean createBankAccount(BankAccount bankAccount) throws ResourseNotFoundException {
-        Business businessbyMid = businessService.getBusinessbyMid(bankAccount.getMid());
-        if (!ObjectUtils.isEmpty(businessbyMid)) {
-            bankAccount.setStatus(getStatus(bankAccount));
-            bankAccountRepository.save(bankAccount);
-        }
-        return ObjectUtils.isEmpty(businessbyMid) ? Boolean.FALSE : Boolean.TRUE;
-    }
+    @Autowired
+    BusinessPanRepository businessPanRepository;
 
-    public boolean updateBankAccount(BankAccount bankAccount) throws ResourseNotFoundException {
-        BankAccount bankAccount1 = bankAccountByMid(bankAccount.getMid());
-        if (!ObjectUtils.isEmpty(bankAccount1)) {
+    @Autowired
+    GstinDeatilsRepository gstinDeatilsRepository;
+
+    public String createBankAccount(BankAccount bankAccount) throws Exception {
+        Business business = businessService.getBusinessbyMid(bankAccount.getMid());
+        if (!(business.getBusinessverification() == 1))
+            throw new Exception("Gstin verification is not requires for entered mid " + bankAccount.getMid());
+        BusinessPan businessPan = businessPanRepository.findByMid(bankAccount.getMid())
+                .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + bankAccount.getMid()));
+        if (!(businessPan.getStatus().equals(Status.APPROVED)))
+            throw new Exception("Business Pan must verify first ");
+        GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(bankAccount.getMid())
+                .orElseThrow(() -> new ResourseNotFoundException("GstinDeatils Pan is not available for entered Mid " + bankAccount.getMid()));
+        if (!(gstinDeatils.getStatus().equals(Status.APPROVED)))
+            throw new Exception("Gstin must verify first ");
             bankAccount.setStatus(getStatus(bankAccount));
             bankAccountRepository.save(bankAccount);
+            return String.valueOf(bankAccount.getStatus());
         }
-        return ObjectUtils.isEmpty(bankAccount1) ? Boolean.FALSE : Boolean.TRUE;
-    }
+
+    public String updateBankAccount(BankAccount bankAccount) throws ResourseNotFoundException {
+        BankAccount bankAccount1 = bankAccountByMid(bankAccount.getMid());
+        bankAccount1.setAccountno(bankAccount.getAccountno());
+        bankAccount1.setBankname(bankAccount.getBankname());
+        bankAccount1.setIfsccode(bankAccount.getIfsccode());
+        bankAccount1.setStatus(getStatus(bankAccount));
+        bankAccountRepository.save(bankAccount1);
+        return String.valueOf(bankAccount1.getStatus());
+        }
+
+
 
     public BankAccount getBankAccount(UUID mid) throws ResourseNotFoundException {
         BankAccount bankAccount1 = bankAccountByMid(mid);

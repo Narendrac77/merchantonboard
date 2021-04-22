@@ -41,19 +41,19 @@ public class BusinessPanResource {
     }
 
     @PostMapping("/business-pans")
-    public String createBusinessPan(@Valid @RequestBody BusinessPan businessPan) throws ResourseNotFoundException {
+    public String createBusinessPan(@Valid @RequestBody BusinessPan businessPan) throws Exception {
         log.debug("REST request to save BusinessPan : {}", businessPan);
-        businessPanService.createBusinessPan(businessPan);
-        return "Created Successfully";
+        String result = businessPanService.createBusinessPan(businessPan);
+        return result ;
     }
 
     @PutMapping("/business-pans/{mid}")
     public String updateBusinessPan(
             @PathVariable(value = "mid", required = true) final UUID mid,
             @Valid @RequestBody BusinessPan businessPan
-    ) throws ResourseNotFoundException {
-        businessPanService.updateBusinessPan(businessPan);
-        return "Businesspan Updated Successfully";
+    ) throws Exception {
+        String result = businessPanService.updateBusinessPan(businessPan);
+        return result;
     }
 
 /*

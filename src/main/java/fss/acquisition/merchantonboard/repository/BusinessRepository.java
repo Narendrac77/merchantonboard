@@ -1,6 +1,7 @@
 package fss.acquisition.merchantonboard.repository;
 
 import fss.acquisition.merchantonboard.domain.Business;
+import io.swagger.models.auth.In;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

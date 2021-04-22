@@ -6,6 +6,7 @@ import fss.acquisition.merchantonboard.domain.BusinessPan;
 import fss.acquisition.merchantonboard.domain.GstinDeatils;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.verification.Gstinverification;
+import fss.acquisition.merchantonboard.repository.BusinessIncorporationRepository;
 import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.repository.GstinDeatilsRepository;
@@ -35,33 +36,53 @@ public class GstinService {
     @Autowired
     GstinverificationRepository gstinverificationRepository;
 
-    public boolean createGstIn(GstinDeatils gstinDeatils) throws ResourseNotFoundException {
+    @Autowired
+    BusinessService businessService;
+
+    @Autowired
+    BusinessPanRepository businessPanRepository;
+
+    @Autowired
+    BusinessIncorporationRepository businessIncorporationRepository;
+
+    public String createGstIn(GstinDeatils gstinDeatils) throws Exception {
         BusinessIncorporation businessIncorporation = businessIncorporationService.getBusinessIncorporation(gstinDeatils.getMid());
-        if (!ObjectUtils.isEmpty(businessIncorporation)) {
-            gstinDeatils.setStatus(getStatus(gstinDeatils));
-            gstinDeatilsRepository.save(gstinDeatils);
-        }
-        return ObjectUtils.isEmpty(gstinDeatils) ? Boolean.FALSE : Boolean.TRUE;
+        Business business = businessService.getBusinessbyMid(gstinDeatils.getMid());
+        if (!(business.getBusinessverification() == 1))
+            throw new Exception("Gstin verification is not requires for entered mid " + gstinDeatils.getMid());
+        BusinessPan businessPan = businessPanRepository.findByMid(gstinDeatils.getMid())
+                .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + gstinDeatils.getMid()));
+        if (!(businessPan.getStatus().equals(Status.APPROVED)))
+            throw new Exception("Business Pan must verify first ");
+        Status status = getStatus(gstinDeatils);
+        gstinDeatils.setStatus(status);
+        gstinDeatilsRepository.save(gstinDeatils);
+        businessIncorporation.setStatus(gstinDeatils.getStatus());
+        businessIncorporationRepository.save(businessIncorporation);
+        return String.valueOf(gstinDeatils.getStatus());
     }
 
-    public boolean updateGstin(GstinDeatils gstinDeatils) throws ResourseNotFoundException {
+    public String updateGstin(GstinDeatils gstinDeatils) throws ResourseNotFoundException {
+        BusinessIncorporation businessIncorporation = businessIncorporationService.getBusinessIncorporation(gstinDeatils.getMid());
         GstinDeatils gstinDeatils1 = gstinDeatils(gstinDeatils.getMid());
-        if (!ObjectUtils.isEmpty(gstinDeatils1)) {
-            gstinDeatils.setStatus(getStatus(gstinDeatils));
-            gstinDeatilsRepository.save(gstinDeatils);
-        }
-        return ObjectUtils.isEmpty(gstinDeatils) ? Boolean.FALSE : Boolean.TRUE;
+        gstinDeatils1.setGstindoc(gstinDeatils.getGstindoc());
+        gstinDeatils1.setGstinno(gstinDeatils.getGstinno());
+        gstinDeatils1.setGstindocContentType(gstinDeatils.getGstindocContentType());
+        gstinDeatils1.setStatus(getStatus(gstinDeatils));
+        gstinDeatilsRepository.save(gstinDeatils);
+        businessIncorporation.setStatus(gstinDeatils.getStatus());
+        businessIncorporationRepository.save(businessIncorporation);
+        return String.valueOf(gstinDeatils1.getStatus());
     }
 
     public GstinDeatils getGstinDetails(UUID mid) throws ResourseNotFoundException {
-        GstinDeatils gstinDeatils = gstinDeatils(mid);
-        return !ObjectUtils.isEmpty(gstinDeatils) ? gstinDeatils : null;
+        return gstinDeatils(mid);
     }
 
     public GstinDeatils gstinDeatils(UUID mid) throws ResourseNotFoundException {
         GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(mid)
                 .orElseThrow(() -> new ResourseNotFoundException("Provided Merchant Id is not valid"));
-        return !ObjectUtils.isEmpty(gstinDeatils) ? gstinDeatils : null;
+        return gstinDeatils;
     }
 
 

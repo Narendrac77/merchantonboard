@@ -44,10 +44,10 @@ public class BankAccountResource {
 
 
     @PostMapping("/bank-accounts")
-    public String createBankAccount(@Valid @RequestBody BankAccount bankAccount) throws ResourseNotFoundException {
+    public String createBankAccount(@Valid @RequestBody BankAccount bankAccount) throws Exception {
         log.debug("REST request to save BankAccount : {}", bankAccount);
-         bankAccountService.createBankAccount(bankAccount);
-        return "Created Successfully";
+        String result = bankAccountService.createBankAccount(bankAccount);
+        return result;
     }
 
     @PutMapping("/bank-accounts/{mid}")
@@ -56,8 +56,8 @@ public class BankAccountResource {
         @Valid @RequestBody BankAccount bankAccount
     ) throws ResourseNotFoundException {
         log.debug("REST request to update BankAccount : {}, {}", mid, bankAccount);
-        bankAccountService.updateBankAccount(bankAccount);
-        return "Updated Successfully";
+        String result = bankAccountService.updateBankAccount(bankAccount);
+        return result;
     }
 
    /* @PatchMapping(value = "/bank-accounts/{id}", consumes = "application/merge-patch+json")

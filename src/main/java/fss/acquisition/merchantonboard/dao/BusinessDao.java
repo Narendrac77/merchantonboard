@@ -10,6 +10,8 @@ public class BusinessDao {
 
     private RiskEnum riskEnum;
 
+    private VerificationCheck verificationCheck;
+
     public String getMid() {
         return mid;
     }
@@ -26,11 +28,20 @@ public class BusinessDao {
         this.riskEnum = riskEnum;
     }
 
+    public VerificationCheck getVerificationCheck() {
+        return verificationCheck;
+    }
+
+    public void setVerificationCheck(VerificationCheck verificationCheck) {
+        this.verificationCheck = verificationCheck;
+    }
+
     @Override
     public String toString() {
         return "BusinessDao{" +
                 "mid='" + mid + '\'' +
                 ", riskEnum=" + riskEnum +
+                ", verificationCheck=" + verificationCheck +
                 '}';
     }
 }

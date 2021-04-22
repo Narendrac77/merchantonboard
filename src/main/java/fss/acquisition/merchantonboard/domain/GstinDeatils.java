@@ -18,6 +18,7 @@ public class GstinDeatils implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -37,6 +38,7 @@ public class GstinDeatils implements Serializable {
     @Column(name = "gstindoc_content_type", nullable = false)
     private String gstindocContentType;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;

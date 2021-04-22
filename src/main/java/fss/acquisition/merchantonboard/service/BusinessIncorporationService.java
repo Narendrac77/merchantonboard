@@ -13,7 +13,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.UUID;
 
 @Service
-public class BusinessIncorporationService{
+public class BusinessIncorporationService {
 
     private final Logger log = LoggerFactory.getLogger(BusinessIncorporationService.class);
 
@@ -23,30 +23,28 @@ public class BusinessIncorporationService{
     @Autowired
     BusinessIncorporationRepository businessIncorporationRepository;
 
-    public boolean createBusinessIncorporation(BusinessIncorporation businessIncorporation) throws ResourseNotFoundException {
-        Business businessbyMid = businessService.getBusinessbyMid(businessIncorporation.getMid());
-        if(!ObjectUtils.isEmpty(businessbyMid)){
-            businessIncorporationRepository.save(businessIncorporation);
-        }
-        return ObjectUtils.isEmpty(businessbyMid)?Boolean.FALSE:Boolean.TRUE;
+    public void createBusinessIncorporation(BusinessIncorporation businessIncorporation) throws ResourseNotFoundException {
+        businessService.getBusinessbyMid(businessIncorporation.getMid());
+        businessIncorporationRepository.save(businessIncorporation);
     }
 
-    public boolean updateBusinessIncorporation(BusinessIncorporation businessIncorporation) throws ResourseNotFoundException {
+    public void updateBusinessIncorporation(BusinessIncorporation businessIncorporation) throws ResourseNotFoundException {
         BusinessIncorporation businessIncorporation1 = getBusinessIncorporation(businessIncorporation.getMid());
-        if(!ObjectUtils.isEmpty(businessIncorporation1)){
-            businessIncorporationRepository.save(businessIncorporation);
-        }
-        return !ObjectUtils.isEmpty(businessIncorporation1)?Boolean.FALSE:Boolean.TRUE;
+        businessIncorporation1.setIncorporationno(businessIncorporation.getIncorporationno());
+        businessIncorporation1.setIncorporationdoc(businessIncorporation.getIncorporationdoc());
+        businessIncorporation1.setBusinessregisteredaddress(businessIncorporation.getBusinessregisteredaddress());
+        businessIncorporation1.setIncorporationdocContentType(businessIncorporation.getIncorporationdocContentType());
+        businessIncorporation1.setBusinesslegalname(businessIncorporation.getBusinesslegalname());
+        businessIncorporationRepository.save(businessIncorporation1);
     }
 
     public BusinessIncorporation getBusinessIncorporation(UUID mid) throws ResourseNotFoundException {
-        BusinessIncorporation businessIncorporation = businessIncoperationByMid(mid);
-        return ObjectUtils.isEmpty(businessIncorporation)? businessIncorporation :null;
+        return businessIncoperationByMid(mid);
     }
 
     public BusinessIncorporation businessIncoperationByMid(UUID mid) throws ResourseNotFoundException {
         BusinessIncorporation businessIncorporation = businessIncorporationRepository.findByMid(mid)
-                .orElseThrow(()-> new ResourseNotFoundException("Provided Merchant Id is not valid"));
-        return !ObjectUtils.isEmpty(businessIncorporation)? businessIncorporation :null;
+                .orElseThrow(() -> new ResourseNotFoundException("Provided Merchant Id is not valid"));
+        return !ObjectUtils.isEmpty(businessIncorporation) ? businessIncorporation : null;
     }
 }

@@ -21,6 +21,7 @@ public class BusinessPan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @JsonIgnore
     private Long id;
 
     @Column(name = "mid")
@@ -37,6 +38,7 @@ public class BusinessPan implements Serializable {
     @Column(name = "pandoc_content_type", nullable = false)
     private String pandocContentType;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;

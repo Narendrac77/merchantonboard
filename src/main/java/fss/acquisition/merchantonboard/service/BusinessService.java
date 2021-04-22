@@ -1,6 +1,7 @@
 package fss.acquisition.merchantonboard.service;
 
 import fss.acquisition.merchantonboard.dao.BusinessDao;
+import fss.acquisition.merchantonboard.dao.VerificationCheck;
 import fss.acquisition.merchantonboard.dao.enumeration.RiskEnum;
 import fss.acquisition.merchantonboard.domain.Business;
 import fss.acquisition.merchantonboard.domain.BusinessOwner;
@@ -42,31 +43,33 @@ public class BusinessService {
         businessOwnerService.getBusinessOwnerbyId(business.getBusinessid());
         displayNameCheck(business.getDisplayname());
         UUID getUUid = generateUUid();
-        Integer categoriesId = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
+        Integer mccCode = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
         getSubCategoriesId(Integer.valueOf(business.getBusinesssubcategory()));
         business.setMid(getUUid);
-        RiskEnum riskEnum = generateRisk(categoriesId, business.getTurnover());
-        business.setRiskscoring(riskEnum);
+        RiskEnum riskEnum = generateRisk(mccCode, business.getTurnover());
+        business.setRiskscoring(riskScoringNumber(riskEnum));
+        getVerificationPriority(business);
         businessRepository.save(business);
-        BusinessDao businessDao = getBusinessDao(getUUid.toString(),riskEnum);
+        BusinessDao businessDao = getBusinessDao(business,riskEnum);
         return businessDao;
     }
 
-    public BusinessDao updateBusiness(Business business) throws ResourseNotFoundException {
+    public BusinessDao updateBusiness(Business business) throws Exception {
         Business business1 = businessRepository.findByMid(business.getMid())
                 .orElseThrow(() -> new ResourseNotFoundException("MerchantId  not found for " + business.getMid()));
-        Integer categoriesId = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
-        RiskEnum riskEnum = generateRisk(categoriesId, business.getTurnover());
+        Integer mccCode = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
+        RiskEnum riskEnum = generateRisk(mccCode, business.getTurnover());
         getSubCategoriesId(Integer.valueOf(business.getBusinesssubcategory()));
-        business1.setRiskscoring(riskEnum);
+        business1.setRiskscoring(riskScoringNumber(riskEnum));
         business1.setTurnover(business.getTurnover());
         business1.setAge(business.getAge());
         business1.setBusinesstype(business.getBusinesstype());
         business1.setCommunicationaddress(business.getCommunicationaddress());
         business1.setBusinesscategory(business.getBusinesscategory());
         business1.setBusinesssubcategory(business.getBusinesssubcategory());
+        getVerificationPriority(business1);
         businessRepository.save(business1);
-        BusinessDao businessDao = getBusinessDao(String.valueOf(business.getMid()),riskEnum);
+        BusinessDao businessDao = getBusinessDao(business1,riskEnum);
         return businessDao;
     }
 
@@ -113,22 +116,66 @@ public class BusinessService {
         return flag;
     }
 
-    public RiskEnum generateRisk(Integer mccCode, BigInteger turnOver) {
+    public RiskEnum generateRisk(Integer mccCode, BigInteger turnOver) throws Exception {
         RiskEnum riskEnum = null;
-        if (mccCode.equals(4814) && (turnOver.longValue()>=10000000))
+        if (mccCode.equals(1)) {
+            if (!(turnOver.longValue() >= 10000000))
+                throw new Exception("turnover must be above 1crore");
             riskEnum = RiskEnum.HIGHRISK;
-        if (mccCode.equals(5641) && ((turnOver.longValue()>=100000) && (turnOver.longValue()<10000000)))
+        } else if (mccCode.equals(2)) {
+            if (!((turnOver.longValue() >= 100000) && (turnOver.longValue() < 10000000)))
+                throw new Exception("turnover must be above 1lakh and below 1crore");
             riskEnum = RiskEnum.MEDIUMRISK;
-        if (mccCode.equals(5641) && ((turnOver.longValue()>0) && (turnOver.longValue()<100000)))
+        } else if (mccCode.equals(3)) {
+            if (!((turnOver.longValue() > 0) && (turnOver.longValue() < 100000)))
+                throw new Exception("turnover must be below 1lakh");
             riskEnum = RiskEnum.LOWRISK;
+        }
         return riskEnum;
     }
 
-    public BusinessDao getBusinessDao(String mid,RiskEnum riskEnum){
+    public BusinessDao getBusinessDao(Business business,RiskEnum riskEnum) {
         BusinessDao businessDao = new BusinessDao();
-        businessDao.setMid(mid);
+        businessDao.setMid(String.valueOf(business.getMid()));
         businessDao.setRiskEnum(riskEnum);
+        VerificationCheck verificationCheck = new VerificationCheck();
+        verificationCheck.setBusinessVerification(business.getBusinessverification());
+        verificationCheck.setIdentityVerification(business.getIdentityverification());
+        verificationCheck.setAccountVerification(business.getAccountverification());
+        businessDao.setVerificationCheck(verificationCheck);
         return businessDao;
     }
+
+    public Business getVerificationPriority(Business business){
+        if(business.getRiskscoring()==1) {
+            business.setBusinessverification(1);
+            business.setIdentityverification(1);
+            business.setAccountverification(1);
+        }
+        if(business.getRiskscoring()==2){
+            business.setBusinessverification(0);
+            business.setIdentityverification(1);
+            business.setAccountverification(1);
+        }
+        if(business.getRiskscoring()==3){
+            business.setBusinessverification(0);
+            business.setIdentityverification(0);
+            business.setAccountverification(1);
+        }
+        return business;
+    }
+
+    public Integer riskScoringNumber(RiskEnum riskEnum) {
+        Integer riskNumber = null;
+        if (riskEnum.equals(RiskEnum.HIGHRISK))
+            riskNumber = 1;
+        if (riskEnum.equals(RiskEnum.MEDIUMRISK))
+            riskNumber = 2;
+        if (riskEnum.equals(RiskEnum.LOWRISK))
+            riskNumber = 3;
+        return riskNumber;
+    }
+
+
 }
 

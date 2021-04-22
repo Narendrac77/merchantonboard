@@ -23,6 +23,7 @@ public class Business implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @JsonIgnore
     private Long id;
 
     @Column(name = "businessid")
@@ -56,10 +57,23 @@ public class Business implements Serializable {
     @Column(name = "mid",unique = true)
     private UUID mid;
 
-    @Enumerated(EnumType.STRING)
+    @JsonIgnore
     @Column(name = "riskscoring")
-    private RiskEnum riskscoring;
+    private Integer riskscoring;
 
+    @JsonIgnore
+    @Column(name = "accountverification")
+    public Integer accountverification;
+
+    @JsonIgnore
+    @Column(name = "identityverification")
+    public Integer identityverification;
+
+    @JsonIgnore
+    @Column(name = "businessverification")
+    public Integer businessverification;
+
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
@@ -216,16 +230,16 @@ public class Business implements Serializable {
         this.mid = mid;
     }
 
-    public RiskEnum getRiskscoring() {
+    public Integer getRiskscoring() {
         return this.riskscoring;
     }
 
-    public Business riskscoring(RiskEnum riskscoring) {
+    public Business riskscoring(Integer riskscoring) {
         this.riskscoring = riskscoring;
         return this;
     }
 
-    public void setRiskscoring(RiskEnum riskscoring) {
+    public void setRiskscoring(Integer riskscoring) {
         this.riskscoring = riskscoring;
     }
 
@@ -240,6 +254,30 @@ public class Business implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Integer getAccountverification() {
+        return accountverification;
+    }
+
+    public void setAccountverification(Integer accountverification) {
+        this.accountverification = accountverification;
+    }
+
+    public Integer getIdentityverification() {
+        return identityverification;
+    }
+
+    public void setIdentityverification(Integer identityverification) {
+        this.identityverification = identityverification;
+    }
+
+    public Integer getBusinessverification() {
+        return businessverification;
+    }
+
+    public void setBusinessverification(Integer businessverification) {
+        this.businessverification = businessverification;
     }
 
     public Long getBusinessid() {

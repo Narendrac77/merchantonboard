@@ -42,10 +42,10 @@ public class GstinDeatilsResource {
 
 
     @PostMapping("/gstin-deatils")
-    public String createGstinDeatils(@Valid @RequestBody GstinDeatils gstinDeatils) throws ResourseNotFoundException {
+    public String createGstinDeatils(@Valid @RequestBody GstinDeatils gstinDeatils) throws Exception {
         log.debug("REST request to save GstinDeatils : {}", gstinDeatils);
-        gstinService.updateGstin(gstinDeatils);
-        return "created successfully";
+        String result = gstinService.createGstIn(gstinDeatils);
+        return result;
          }
 
 
@@ -55,8 +55,8 @@ public class GstinDeatilsResource {
         @Valid @RequestBody GstinDeatils gstinDeatils
     ) throws ResourseNotFoundException {
         log.debug("REST request to update GstinDeatils : {}, {}", mid, gstinDeatils);
-        gstinService.updateGstin(gstinDeatils);
-        return "Updated Successfully";
+        String result = gstinService.updateGstin(gstinDeatils);
+        return result;
     }
 
 

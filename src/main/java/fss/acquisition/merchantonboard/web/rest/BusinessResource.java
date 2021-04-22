@@ -51,7 +51,7 @@ public class BusinessResource {
     public BusinessDao updateBusiness(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Business business
-    ) throws ResourseNotFoundException {
+    ) throws Exception {
         log.debug("REST request to update Business : {}, {}", id, business);
         BusinessDao businessDao = businessService.updateBusiness(business);
         return businessDao ;
