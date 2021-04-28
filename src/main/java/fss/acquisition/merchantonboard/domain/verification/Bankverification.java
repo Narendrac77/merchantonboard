@@ -18,7 +18,7 @@ public class Bankverification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "bankverification_id")
+    @Column(name = "bankverificationid")
     private Integer bankverificationId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

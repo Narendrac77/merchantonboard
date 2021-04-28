@@ -17,7 +17,7 @@ public class Panverification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "panverification_id")
+    @Column(name = "panverificationid")
     private Integer panverificationId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

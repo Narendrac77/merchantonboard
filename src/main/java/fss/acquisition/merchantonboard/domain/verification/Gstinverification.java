@@ -18,7 +18,7 @@ public class Gstinverification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "gstinverification_id")
+    @Column(name = "gstinverificationid")
     private Integer gstinverificationId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

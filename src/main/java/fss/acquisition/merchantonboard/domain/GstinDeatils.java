@@ -7,7 +7,9 @@ import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,7 +27,7 @@ public class GstinDeatils implements Serializable {
     private Long id;
 
     @Column(name = "mid")
-    private UUID mid;
+    private String mid;
 
     @NotNull
     @Column(name = "gstinno", nullable = false)
@@ -43,11 +45,12 @@ public class GstinDeatils implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    //@JsonIgnoreProperties(value = { "gstinDeatils", "business" }, allowSetters = true)
-    @JsonIgnore
+
+    /*@ApiModelProperty(hidden = true)
     @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
-    private BusinessIncorporation businessIncorporation;
+    private BusinessIncorporation businessIncorporation;*/
 
     public Long getId() {
         return id;
@@ -62,17 +65,17 @@ public class GstinDeatils implements Serializable {
         return this;
     }
 
-    public UUID getMid() {
+    public String getMid() {
 
         return this.mid;
     }
 
-    public GstinDeatils mid(UUID mid) {
+    public GstinDeatils mid(String mid) {
         this.mid = mid;
         return this;
     }
 
-    public void setMid(UUID mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -128,25 +131,13 @@ public class GstinDeatils implements Serializable {
         this.status = status;
     }
 
-    public BusinessIncorporation getBusinessIncoperation() {
-        return this.businessIncorporation;
+    /*public BusinessIncorporation getBusinessIncorporation() {
+        return businessIncorporation;
     }
 
-    public GstinDeatils businessIncoperation(BusinessIncorporation businessIncorporation) {
-        this.setBusinessIncoperation(businessIncorporation);
-        return this;
-    }
-
-    public void setBusinessIncoperation(BusinessIncorporation businessIncorporation) {
-        if (this.businessIncorporation != null) {
-            this.businessIncorporation.setGstinDeatils(null);
-        }
-        if (businessIncorporation != null) {
-            businessIncorporation.setGstinDeatils(this);
-        }
+    public void setBusinessIncorporation(BusinessIncorporation businessIncorporation) {
         this.businessIncorporation = businessIncorporation;
-    }
-
+    }*/
 
     @Override
     public boolean equals(Object o) {

@@ -42,12 +42,12 @@ public class BusinessContactService {
         return ObjectUtils.isEmpty(businessContact1)?Boolean.FALSE:Boolean.TRUE;
     }
 
-    public BusinessContact getBusinessContact(UUID mid) throws ResourseNotFoundException {
+    public BusinessContact getBusinessContact(String mid) throws ResourseNotFoundException {
         BusinessContact businessContact = businessContactByMid(mid);
         return !ObjectUtils.isEmpty(businessContact)?businessContact:null;
     }
 
-    public BusinessContact businessContactByMid(UUID mid) throws ResourseNotFoundException {
+    public BusinessContact businessContactByMid(String mid) throws ResourseNotFoundException {
         BusinessContact businessContact = businessContactRepository.findByMid(mid)
                 .orElseThrow(()-> new ResourseNotFoundException("Provided Merchant Id is not valid"));
         return !ObjectUtils.isEmpty(businessContact)?businessContact:null;

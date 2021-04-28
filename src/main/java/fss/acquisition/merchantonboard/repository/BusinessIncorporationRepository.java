@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface BusinessIncorporationRepository extends JpaRepository<BusinessIncorporation, Long> {
 
-    Optional<BusinessIncorporation> findByMid(UUID Mid);
+    Optional<BusinessIncorporation> findByMid(String Mid);
 
-    void deleteByMid(UUID mid);
+    void deleteByMid(String mid);
 }

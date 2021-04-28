@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
-    Optional<BankAccount> findByMid(UUID mid);
+    Optional<BankAccount> findByMid(String mid);
 
-    void deleteByMid(UUID mid);
+    void deleteByMid(String mid);
 }

@@ -7,18 +7,11 @@ import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -51,7 +44,7 @@ public class BusinessContactResource {
 
     @PutMapping("/business-contacts/{mid}")
     public String updateBusinessContact(
-        @PathVariable(value = "mid", required = true) final UUID mid,
+        @PathVariable(value = "mid", required = true) final String mid,
         @Valid @RequestBody BusinessContact businessContact
     ) throws ResourseNotFoundException {
         log.debug("REST request to update BusinessContact : {}", businessContact);
@@ -113,14 +106,14 @@ public class BusinessContactResource {
     }
 
     @GetMapping("/business-contacts/{mid}")
-    public BusinessContact getBusinessContact(@PathVariable UUID mid) throws ResourseNotFoundException {
+    public BusinessContact getBusinessContact(@PathVariable String mid) throws ResourseNotFoundException {
         log.debug("REST request to get BusinessContact : {}", mid);
         return businessContactService.getBusinessContact(mid);
     }
 
 
     @DeleteMapping("/business-contacts/{mid}")
-    public String deleteBusinessContact(@PathVariable UUID mid) {
+    public String deleteBusinessContact(@PathVariable String mid) {
         log.debug("REST request to delete BusinessContact : {}", mid);
         businessContactRepository.deleteByMid(mid);
         return "Deleted Resource successfully";

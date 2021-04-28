@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface GstinDeatilsRepository extends JpaRepository<GstinDeatils, Long> {
 
-    Optional<GstinDeatils> findByMid(UUID mid);
+    Optional<GstinDeatils> findByMid(String mid);
 
-    void deleteByMid(UUID mid);
+    void deleteByMid(String mid);
 }

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class BankAccountService {
@@ -42,14 +41,14 @@ public class BankAccountService {
 
     public String createBankAccount(BankAccount bankAccount) throws Exception {
         Business business = businessService.getBusinessbyMid(bankAccount.getMid());
-        if (!(business.getBusinessverification() == 1))
-            throw new Exception("Gstin verification is not requires for entered mid " + bankAccount.getMid());
+        if (!(business.getAccountverification() == 1))
+            throw new Exception("account verification is not requires for entered mid " + bankAccount.getMid());
         BusinessPan businessPan = businessPanRepository.findByMid(bankAccount.getMid())
                 .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + bankAccount.getMid()));
         if (!(businessPan.getStatus().equals(Status.APPROVED)))
             throw new Exception("Business Pan must verify first ");
         GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(bankAccount.getMid())
-                .orElseThrow(() -> new ResourseNotFoundException("GstinDeatils Pan is not available for entered Mid " + bankAccount.getMid()));
+                .orElseThrow(() -> new ResourseNotFoundException("GstinDeatils is not available for entered Mid " + bankAccount.getMid()));
         if (!(gstinDeatils.getStatus().equals(Status.APPROVED)))
             throw new Exception("Gstin must verify first ");
             bankAccount.setStatus(getStatus(bankAccount));
@@ -69,12 +68,12 @@ public class BankAccountService {
 
 
 
-    public BankAccount getBankAccount(UUID mid) throws ResourseNotFoundException {
+    public BankAccount getBankAccount(String mid) throws ResourseNotFoundException {
         BankAccount bankAccount1 = bankAccountByMid(mid);
         return !ObjectUtils.isEmpty(bankAccount1) ? bankAccount1 : null;
     }
 
-    public BankAccount bankAccountByMid(UUID mid) throws ResourseNotFoundException {
+    public BankAccount bankAccountByMid(String mid) throws ResourseNotFoundException {
         BankAccount bankAccount = bankAccountRepository.findByMid(mid)
                 .orElseThrow(() -> new ResourseNotFoundException("Provided Merchant Id is not valid"));
         return !ObjectUtils.isEmpty(bankAccount) ? bankAccount : null;

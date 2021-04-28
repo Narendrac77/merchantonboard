@@ -1,6 +1,11 @@
 package fss.acquisition.merchantonboard.domain;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.*;
@@ -15,8 +20,7 @@ public class BusinessContact implements Serializable {
 
     @JsonIgnore
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -32,17 +36,16 @@ public class BusinessContact implements Serializable {
     private String contactemailid;
 
     @Column(name = "mid")
-    private UUID mid;
+    private String mid;
 
     @Column(name = "contacttype")
     private Integer contacttype;
 
 
-
+    @ApiModelProperty(hidden = true)
     @ManyToOne
-   // @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
-    @JsonIgnore
-    @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
+    @JsonBackReference(value = "business-contacts")
+    @JoinColumn(name = "mid", insertable = false, updatable = false, unique = true, referencedColumnName = "mid")
     private Business business;
 
     public Long getId() {
@@ -97,16 +100,16 @@ public class BusinessContact implements Serializable {
         this.contactemailid = contactemailid;
     }
 
-    public UUID getMid() {
+    public String getMid() {
         return this.mid;
     }
 
-    public BusinessContact mid(UUID mid) {
+    public BusinessContact mid(String mid) {
         this.mid = mid;
         return this;
     }
 
-    public void setMid(UUID mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -124,7 +127,6 @@ public class BusinessContact implements Serializable {
     }
 
 
-
     public Business getBusiness() {
         return this.business;
     }
@@ -137,7 +139,6 @@ public class BusinessContact implements Serializable {
     public void setBusiness(Business business) {
         this.business = business;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -152,7 +153,6 @@ public class BusinessContact implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 

@@ -2,7 +2,9 @@ package fss.acquisition.merchantonboard.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -24,7 +26,7 @@ public class AadharDetails implements Serializable {
 
     @NotNull
     @Column(name = "aadharno", nullable = false)
-    private UUID aadharno;
+    private String aadharno;
 
     @NotNull
     @Column(name = "businessid", nullable = false,unique = true)
@@ -43,8 +45,8 @@ public class AadharDetails implements Serializable {
     private Status status;
 
     @OneToOne
-   // @JsonIgnoreProperties(value = {"aadharDetails","business"}, allowSetters = true)
-    @JsonIgnore
+    @ApiModelProperty(hidden = true)
+    @JsonManagedReference(value = "aadhar-details")
     @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
     private BusinessOwner businessOwner;
 
@@ -63,16 +65,16 @@ public class AadharDetails implements Serializable {
 
 
 
-    public UUID getAadharno() {
+    public String getAadharno() {
         return this.aadharno;
     }
 
-    public AadharDetails aadharno(UUID aadharno) {
+    public AadharDetails aadharno(String aadharno) {
         this.aadharno = aadharno;
         return this;
     }
 
-    public void setAadharno(UUID aadharno) {
+    public void setAadharno(String aadharno) {
         this.aadharno = aadharno;
     }
 

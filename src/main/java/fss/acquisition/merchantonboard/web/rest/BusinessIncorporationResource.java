@@ -113,13 +113,13 @@ public class BusinessIncorporationResource {
     }
 
     @GetMapping("/business-incoperations/{mid}")
-    public BusinessIncorporation getBusinessIncoperation(@PathVariable UUID mid) throws ResourseNotFoundException {
+    public BusinessIncorporation getBusinessIncoperation(@PathVariable String mid) throws ResourseNotFoundException {
         log.debug("REST request to get BusinessIncoperation : {}", mid);
         return businessIncorporationService.getBusinessIncorporation(mid);
     }
 
     @DeleteMapping("/business-incoperations/{mid}")
-    public String deleteBusinessIncoperation(@PathVariable UUID mid) {
+    public String deleteBusinessIncoperation(@PathVariable String mid) {
         log.debug("REST request to delete BusinessIncoperation : {}", mid);
         businessIncorporationRepository.deleteByMid(mid);
         return "Deleted Successfully";

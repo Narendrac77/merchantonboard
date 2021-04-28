@@ -5,13 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Repository
 public interface BusinessContactRepository extends JpaRepository<BusinessContact, Long> {
 
-        Optional<BusinessContact> findByMid(UUID mid);
+        Optional<BusinessContact> findByMid(String mid);
 
-        void deleteByMid(UUID mid);
+        void deleteByMid(String mid);
 }

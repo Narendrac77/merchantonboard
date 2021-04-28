@@ -51,7 +51,7 @@ public class GstinDeatilsResource {
 
     @PutMapping("/gstin-deatils/{mid}")
     public String updateGstinDeatils(
-        @PathVariable(value = "mid", required = true) final UUID mid,
+        @PathVariable(value = "mid", required = true) final String mid,
         @Valid @RequestBody GstinDeatils gstinDeatils
     ) throws ResourseNotFoundException {
         log.debug("REST request to update GstinDeatils : {}, {}", mid, gstinDeatils);
@@ -115,13 +115,13 @@ public class GstinDeatilsResource {
 
 
     @GetMapping("/gstin-deatils/{mid}")
-    public GstinDeatils getGstinDeatils(@PathVariable UUID mid) throws ResourseNotFoundException {
+    public GstinDeatils getGstinDeatils(@PathVariable String mid) throws ResourseNotFoundException {
         log.debug("REST request to get GstinDeatils : {}", mid);
         return gstinService.getGstinDetails(mid);
     }
 
     @DeleteMapping("/gstin-deatils/{mid}")
-    public String deleteGstinDeatils(@PathVariable UUID mid) {
+    public String deleteGstinDeatils(@PathVariable String mid) {
         log.debug("REST request to delete GstinDeatils : {}", mid);
         gstinDeatilsRepository.deleteByMid(mid);
         return " resource Deleted";

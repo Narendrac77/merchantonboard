@@ -38,11 +38,11 @@ public class BusinessIncorporationService {
         businessIncorporationRepository.save(businessIncorporation1);
     }
 
-    public BusinessIncorporation getBusinessIncorporation(UUID mid) throws ResourseNotFoundException {
+    public BusinessIncorporation getBusinessIncorporation(String mid) throws ResourseNotFoundException {
         return businessIncoperationByMid(mid);
     }
 
-    public BusinessIncorporation businessIncoperationByMid(UUID mid) throws ResourseNotFoundException {
+    public BusinessIncorporation businessIncoperationByMid(String mid) throws ResourseNotFoundException {
         BusinessIncorporation businessIncorporation = businessIncorporationRepository.findByMid(mid)
                 .orElseThrow(() -> new ResourseNotFoundException("Provided Merchant Id is not valid"));
         return !ObjectUtils.isEmpty(businessIncorporation) ? businessIncorporation : null;

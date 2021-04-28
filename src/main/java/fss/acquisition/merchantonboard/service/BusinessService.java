@@ -4,14 +4,11 @@ import fss.acquisition.merchantonboard.dao.BusinessDao;
 import fss.acquisition.merchantonboard.dao.VerificationCheck;
 import fss.acquisition.merchantonboard.dao.enumeration.RiskEnum;
 import fss.acquisition.merchantonboard.domain.Business;
-import fss.acquisition.merchantonboard.domain.BusinessOwner;
 import fss.acquisition.merchantonboard.domain.metadata.Categories;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.repository.metadata.CategoriesRepository;
 import fss.acquisition.merchantonboard.repository.metadata.SubCategoriesRepository;
-import fss.acquisition.merchantonboard.web.rest.errors.GlobalExceptionHandler;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,9 +38,9 @@ public class BusinessService {
     SubCategoriesRepository subCategoriesRepository;
 
     public BusinessDao createBusiness(Business business) throws Exception {
-        businessOwnerService.getBusinessOwnerbyId(business.getBusinessid());
+       businessOwnerService.getBusinessOwnerbyId(business.getBusinessid());
         displayNameCheck(business.getDisplayname());
-        UUID getUUid = generateUUid();
+        String getUUid = generateUUid();
         Integer mccCode = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
         getSubCategoriesId(Integer.valueOf(business.getBusinesssubcategory()));
         business.setMid(getUUid);
@@ -55,8 +53,8 @@ public class BusinessService {
     }
 
     public BusinessDao updateBusiness(Business business) throws Exception {
-        Business business1 = businessRepository.findByMid(business.getMid())
-                .orElseThrow(() -> new ResourseNotFoundException("MerchantId  not found for " + business.getMid()));
+     /* //  Business business1 = businessRepository.findBusinessByMid(business.getMid())
+      //          .orElseThrow(() -> new ResourseNotFoundException("MerchantId  not found for " + business.getMid()));
         Integer mccCode = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
         RiskEnum riskEnum = generateRisk(mccCode, business.getTurnover());
         getSubCategoriesId(Integer.valueOf(business.getBusinesssubcategory()));
@@ -70,7 +68,8 @@ public class BusinessService {
         getVerificationPriority(business1);
         businessRepository.save(business1);
         BusinessDao businessDao = getBusinessDao(business1,riskEnum);
-        return businessDao;
+        return businessDao;*/
+        return new BusinessDao();
     }
 
 
@@ -80,15 +79,15 @@ public class BusinessService {
         return !ObjectUtils.isEmpty(business1) ? business1 : null;
     }
 
-    public Business getBusinessbyMid(UUID mid) throws ResourseNotFoundException {
+    public Business getBusinessbyMid(String mid) throws ResourseNotFoundException {
         log.debug("Business fetched by ", mid);
-        Optional<Business> businessOptional = Optional.ofNullable(businessRepository.findByMid(mid)
-                .orElseThrow(() -> new ResourseNotFoundException("Business resourse is not found for entered id")));
-        return businessOptional.get();
+        Business business = businessRepository.findBusinessByMid(mid)
+                .orElseThrow(() -> new ResourseNotFoundException("Business resourse is not found for entered id"));
+        return business;
     }
 
-    private UUID generateUUid() {
-        return UUID.randomUUID();
+    private String generateUUid() {
+        return String.valueOf(UUID.randomUUID());
     }
 
     private Integer getCategoriesId(Integer id) throws ResourseNotFoundException {

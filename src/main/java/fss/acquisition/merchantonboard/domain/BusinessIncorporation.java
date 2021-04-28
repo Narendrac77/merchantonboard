@@ -1,7 +1,10 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -22,7 +25,7 @@ public class BusinessIncorporation implements Serializable {
     private Long id;
 
     @Column(name = "mid")
-    private UUID mid;
+    private String mid;
 
     @NotNull
     @Column(name = "incorporationno", nullable = false)
@@ -48,13 +51,13 @@ public class BusinessIncorporation implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonIgnoreProperties(allowSetters = true)
+    /*@JsonBackReference
     @OneToOne(mappedBy = "businessIncorporation")
-    private GstinDeatils gstinDeatils;
+    private GstinDeatils gstinDeatils;*/
 
+    @ApiModelProperty(hidden = true)
+    @JsonManagedReference(value = "business-incorporation")
     @OneToOne
-    //@JsonIgnoreProperties(value = { "businessPan", "businessIncorporation", "businessContacts", "bankAccounts","businessOwner" }, allowSetters = true)
-    @JsonIgnore
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 
@@ -71,16 +74,16 @@ public class BusinessIncorporation implements Serializable {
         return this;
     }
 
-    public UUID getMid() {
+    public String getMid() {
         return this.mid;
     }
 
-    public BusinessIncorporation mid(UUID mid) {
+    public BusinessIncorporation mid(String mid) {
         this.mid = mid;
         return this;
     }
 
-    public void setMid(UUID mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -162,39 +165,22 @@ public class BusinessIncorporation implements Serializable {
         this.status = status;
     }
 
-    public GstinDeatils getGstinDeatils() {
-        return this.gstinDeatils;
+    public Business getBusiness() {
+        return business;
     }
 
-    public BusinessIncorporation gstinDeatils(GstinDeatils gstinDeatils) {
-        this.setGstinDeatils(gstinDeatils);
-        return this;
+    public void setBusiness(Business business) {
+        this.business = business;
+    }
+
+   /* public GstinDeatils getGstinDeatils() {
+        return gstinDeatils;
     }
 
     public void setGstinDeatils(GstinDeatils gstinDeatils) {
         this.gstinDeatils = gstinDeatils;
     }
-
-    public Business getBusiness() {
-        return this.business;
-    }
-
-    public BusinessIncorporation business(Business business) {
-        this.setBusiness(business);
-        return this;
-    }
-
-    public void setBusiness(Business business) {
-        if (this.business != null) {
-            this.business.setBusinessIncoperation(null);
-        }
-        if (business != null) {
-            business.setBusinessIncoperation(this);
-        }
-        this.business = business;
-    }
-
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -208,7 +194,6 @@ public class BusinessIncorporation implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 

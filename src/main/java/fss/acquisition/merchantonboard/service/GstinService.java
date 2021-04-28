@@ -8,7 +8,6 @@ import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.verification.Gstinverification;
 import fss.acquisition.merchantonboard.repository.BusinessIncorporationRepository;
 import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
-import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.repository.GstinDeatilsRepository;
 import fss.acquisition.merchantonboard.repository.verification.GstinverificationRepository;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
@@ -16,10 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class GstinService {
@@ -75,11 +72,11 @@ public class GstinService {
         return String.valueOf(gstinDeatils1.getStatus());
     }
 
-    public GstinDeatils getGstinDetails(UUID mid) throws ResourseNotFoundException {
+    public GstinDeatils getGstinDetails(String mid) throws ResourseNotFoundException {
         return gstinDeatils(mid);
     }
 
-    public GstinDeatils gstinDeatils(UUID mid) throws ResourseNotFoundException {
+    public GstinDeatils gstinDeatils(String mid) throws ResourseNotFoundException {
         GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(mid)
                 .orElseThrow(() -> new ResourseNotFoundException("Provided Merchant Id is not valid"));
         return gstinDeatils;

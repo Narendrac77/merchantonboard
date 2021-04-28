@@ -49,7 +49,7 @@ public class BusinessPanResource {
 
     @PutMapping("/business-pans/{mid}")
     public String updateBusinessPan(
-            @PathVariable(value = "mid", required = true) final UUID mid,
+            @PathVariable(value = "mid", required = true) final String mid,
             @Valid @RequestBody BusinessPan businessPan
     ) throws Exception {
         String result = businessPanService.updateBusinessPan(businessPan);
@@ -110,14 +110,14 @@ public class BusinessPanResource {
     }
 
     @GetMapping("/business-pans/{mid}")
-    public BusinessPan getBusinessPan(@PathVariable UUID mid) throws ResourseNotFoundException {
+    public BusinessPan getBusinessPan(@PathVariable String mid) throws ResourseNotFoundException {
         log.debug("REST request to get BusinessPan : {}", mid);
         return businessPanService.getBusinessPan(mid);
     }
 
 
     @DeleteMapping("/business-pans/{mid}")
-    public String deleteBusinessPan(@PathVariable UUID mid) {
+    public String deleteBusinessPan(@PathVariable String mid) {
         log.debug("REST request to delete BusinessPan : {}", mid);
         businessPanRepository.deleteByMid(mid);
         return "Deleted Successfully";

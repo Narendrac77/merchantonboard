@@ -6,8 +6,10 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,12 +42,13 @@ public class BusinessOwner implements Serializable {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @JsonIgnoreProperties( allowSetters = true)
+   // @JsonIgnoreProperties( allowSetters = true)
     @OneToOne(mappedBy = "businessOwner")
+    @JsonBackReference(value = "aadhar-details")
     private AadharDetails aadharDetails;
 
     @OneToMany(mappedBy = "businessOwner")
-    @JsonIgnoreProperties(value = { "business" }, allowSetters = true)
+    @JsonManagedReference(value = "business-owner")
     private Set<Business> businesses = new HashSet<>();
 
     public Long getId() {

@@ -1,31 +1,32 @@
 package fss.acquisition.merchantonboard.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 @Entity
 @Table(name = "businesspan")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BusinessPan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "mid")
-    private UUID mid;
+    private String mid;
 
     @NotNull
     @Column(name = "panno", nullable = false)
@@ -35,7 +36,7 @@ public class BusinessPan implements Serializable {
     @Column(name = "pandoc")
     private byte[] pandoc;
 
-    @Column(name = "pandoc_content_type", nullable = false)
+    @Column(name = "pandoc_content_type")
     private String pandocContentType;
 
     @JsonIgnore
@@ -43,35 +44,27 @@ public class BusinessPan implements Serializable {
     @Column(name = "status")
     private Status status;
 
-   // @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
-    @OneToOne
-    @JsonIgnore
-    @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
+    // @JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
+    @ApiModelProperty(hidden = true)
+    @JsonManagedReference(value = "business-pan")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mid", insertable = false, updatable = false,referencedColumnName = "mid")
     private Business business;
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public BusinessPan id(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public UUID getMid() {
+    public String getMid() {
         return this.mid;
     }
 
-    public BusinessPan mid(UUID mid) {
+    public BusinessPan mid(String mid) {
         this.mid = mid;
         return this;
     }
 
-    public void setMid(UUID mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -128,35 +121,13 @@ public class BusinessPan implements Serializable {
     }
 
     public Business getBusiness() {
-        return this.business;
-    }
-
-    public BusinessPan business(Business business) {
-        this.setBusiness(business);
-        return this;
+        return business;
     }
 
     public void setBusiness(Business business) {
-        if (this.business != null) {
-            this.business.setBusinessPan(null);
-        }
-        if (business != null) {
-            business.setBusinessPan(this);
-        }
         this.business = business;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof BusinessPan)) {
-            return false;
-        }
-        return id != null && id.equals(((BusinessPan) o).id);
-    }
 
     @Override
     public int hashCode() {
@@ -168,7 +139,6 @@ public class BusinessPan implements Serializable {
     @Override
     public String toString() {
         return "BusinessPan{" +
-                "id=" + getId() +
                 ", mid='" + getMid() + "'" +
                 ", panno='" + getPanno() + "'" +
                 ", pandoc='" + getPandoc() + "'" +

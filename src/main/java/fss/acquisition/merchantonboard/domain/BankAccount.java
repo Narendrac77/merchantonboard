@@ -1,4 +1,5 @@
 package fss.acquisition.merchantonboard.domain;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
@@ -6,7 +7,9 @@ import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -20,12 +23,11 @@ public class BankAccount implements Serializable {
 
     @JsonIgnore
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "mid")
-    private UUID mid;
+    private String mid;
 
     @NotNull
     @Column(name = "accountno", nullable = false)
@@ -48,10 +50,10 @@ public class BankAccount implements Serializable {
     @Column(name = "status")
     private Status status;
 
+    @ApiModelProperty(hidden = true)
     @ManyToOne
-    //@JsonIgnoreProperties(value = { "businessPan", "businessIncoperation", "businessContacts", "bankAccounts" }, allowSetters = true)
-    @JsonIgnore
-    @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
+    @JsonBackReference(value ="bank-accounts")
+   @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 
 
@@ -68,16 +70,16 @@ public class BankAccount implements Serializable {
         return this;
     }
 
-    public UUID getMid() {
+    public String getMid() {
         return this.mid;
     }
 
-    public BankAccount mid(UUID mid) {
+    public BankAccount mid(String mid) {
         this.mid = mid;
         return this;
     }
 
-    public void setMid(UUID mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -158,7 +160,6 @@ public class BankAccount implements Serializable {
     public void setBusiness(Business business) {
         this.business = business;
     }
-
 
     @Override
     public boolean equals(Object o) {

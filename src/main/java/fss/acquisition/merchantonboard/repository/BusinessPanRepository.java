@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface BusinessPanRepository extends JpaRepository<BusinessPan, Long> {
 
-    Optional<BusinessPan> findByMid(UUID mid);
+    Optional<BusinessPan> findByMid(String mid);
 
-    void deleteByMid(UUID mid);
+    void deleteByMid(String mid);
 }

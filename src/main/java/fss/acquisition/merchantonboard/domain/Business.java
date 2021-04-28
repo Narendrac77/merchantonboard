@@ -1,30 +1,23 @@
 package fss.acquisition.merchantonboard.domain;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fss.acquisition.merchantonboard.domain.enumeration.Status;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
-import javax.persistence.*;
-
-import fss.acquisition.merchantonboard.dao.enumeration.RiskEnum;
-import fss.acquisition.merchantonboard.domain.enumeration.Status;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "business")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Business implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @JsonIgnore
-    private Long id;
 
     @Column(name = "businessid")
     private Long businessid;
@@ -54,8 +47,9 @@ public class Business implements Serializable {
     @Column(name = "turnover")
     private BigInteger turnover;
 
+    @Id
     @Column(name = "mid",unique = true)
-    private UUID mid;
+    private String mid;
 
     @JsonIgnore
     @Column(name = "riskscoring")
@@ -78,40 +72,27 @@ public class Business implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonIgnoreProperties(value = { "business" }, allowSetters = true)
-    @OneToOne(mappedBy = "business")
+   @JsonBackReference(value = "business-pan")
+    @OneToOne(mappedBy = "business",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private BusinessPan businessPan;
 
-    @JsonIgnoreProperties(value = { "gstinDeatils", "business" }, allowSetters = true)
-    @OneToOne(mappedBy = "business")
+    @JsonBackReference(value = "business-incorporation")
+    @OneToOne(mappedBy = "business",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private BusinessIncorporation businessIncorporation;
 
-    @OneToMany(mappedBy = "business")
-    @JsonIgnoreProperties(value = { "aadharDetails", "business" }, allowSetters = true)
+    @JsonManagedReference(value = "business-contacts")
+    @OneToMany(mappedBy = "business",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<BusinessContact> businessContacts = new HashSet<>();
 
-    @OneToMany(mappedBy = "business")
-    @JsonIgnoreProperties(value = { "business" }, allowSetters = true)
+    @JsonManagedReference(value ="bank-accounts")
+    @OneToMany(mappedBy = "business",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<BankAccount> bankAccounts = new HashSet<>();
 
-    @ManyToOne
-   // @JsonIgnoreProperties(value = { "aadharDetails" }, allowSetters = true)
-    @JsonIgnore
+    @ApiModelProperty(hidden = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference(value = "business-owner")
     @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
     private BusinessOwner businessOwner;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Business id(Long id) {
-        this.id = id;
-        return this;
-    }
 
     public String getDisplayname() {
         return this.displayname;
@@ -217,16 +198,16 @@ public class Business implements Serializable {
         this.turnover = turnover;
     }
 
-    public UUID getMid() {
+    public String getMid() {
         return this.mid;
     }
 
-    public Business mid(UUID mid) {
+    public Business mid(String mid) {
         this.mid = mid;
         return this;
     }
 
-    public void setMid(UUID mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -289,28 +270,18 @@ public class Business implements Serializable {
     }
 
     public BusinessPan getBusinessPan() {
-        return this.businessPan;
-    }
-
-    public Business businessPan(BusinessPan businessPan) {
-        this.setBusinessPan(businessPan);
-        return this;
+        return businessPan;
     }
 
     public void setBusinessPan(BusinessPan businessPan) {
         this.businessPan = businessPan;
     }
 
-    public BusinessIncorporation getBusinessIncoperation() {
-        return this.businessIncorporation;
+    public BusinessIncorporation getBusinessIncorporation() {
+        return businessIncorporation;
     }
 
-    public Business businessIncoperation(BusinessIncorporation businessIncorporation) {
-        this.setBusinessIncoperation(businessIncorporation);
-        return this;
-    }
-
-    public void setBusinessIncoperation(BusinessIncorporation businessIncorporation) {
+    public void setBusinessIncorporation(BusinessIncorporation businessIncorporation) {
         this.businessIncorporation = businessIncorporation;
     }
 
@@ -322,7 +293,6 @@ public class Business implements Serializable {
         this.setBusinessContacts(businessContacts);
         return this;
     }
-
     public Business addBusinessContact(BusinessContact businessContact) {
         this.businessContacts.add(businessContact);
         businessContact.setBusiness(this);
@@ -384,7 +354,10 @@ public class Business implements Serializable {
         this.businessOwner = businessOwner;
     }
 
-    @Override
+    public Business() {
+    }
+
+   /* @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -393,19 +366,19 @@ public class Business implements Serializable {
             return false;
         }
         return id != null && id.equals(((Business) o).id);
-    }
+    }*/
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
+
     // prettier-ignore
-    @Override
+   @Override
     public String toString() {
         return "Business{" +
-                "id=" + getId() +
+             //   "id=" + getId() +
                 ", displayname='" + getDisplayname() + "'" +
                 ", businesstype='" + getBusinesstype() + "'" +
                 ", businesscategory='" + getBusinesscategory() + "'" +
@@ -419,4 +392,5 @@ public class Business implements Serializable {
                 ", status='" + getStatus() + "'" +
                 "}";
     }
+
 }

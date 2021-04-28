@@ -52,7 +52,7 @@ public class BankAccountResource {
 
     @PutMapping("/bank-accounts/{mid}")
     public String updateBankAccount(
-        @PathVariable(value = "mid", required = true) final UUID mid,
+        @PathVariable(value = "mid", required = true) final String mid,
         @Valid @RequestBody BankAccount bankAccount
     ) throws ResourseNotFoundException {
         log.debug("REST request to update BankAccount : {}, {}", mid, bankAccount);
@@ -117,14 +117,14 @@ public class BankAccountResource {
     }
 
     @GetMapping("/bank-accounts/{mid}")
-    public BankAccount getBankAccount(@PathVariable UUID mid) throws ResourseNotFoundException {
+    public BankAccount getBankAccount(@PathVariable String mid) throws ResourseNotFoundException {
         log.debug("REST request to get BankAccount : {}", mid);
         return bankAccountService.getBankAccount(mid);
     }
 
 
     @DeleteMapping("/bank-accounts/{mid}")
-    public String deleteBankAccount(@PathVariable UUID mid) {
+    public String deleteBankAccount(@PathVariable String mid) {
         log.debug("REST request to delete BankAccount : {}", mid);
         bankAccountRepository.deleteByMid(mid);
         return "Deleted Successfully";
