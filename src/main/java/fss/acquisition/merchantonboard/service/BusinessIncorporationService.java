@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,9 +24,12 @@ public class BusinessIncorporationService {
     @Autowired
     BusinessIncorporationRepository businessIncorporationRepository;
 
-    public void createBusinessIncorporation(BusinessIncorporation businessIncorporation) throws ResourseNotFoundException {
+    public void createBusinessIncorporation(BusinessIncorporation businessIncorporation) throws Exception {
         businessService.getBusinessbyMid(businessIncorporation.getMid());
-        businessIncorporationRepository.save(businessIncorporation);
+        Optional<BusinessIncorporation> businessIncorporation1 = businessIncorporationRepository.findByMid(businessIncorporation.getMid());
+        if(businessIncorporation1.isPresent())
+            throw new Exception("Business Incorporation is already exits for entered mid "+ businessIncorporation.getMid());
+          businessIncorporationRepository.save(businessIncorporation);
     }
 
     public void updateBusinessIncorporation(BusinessIncorporation businessIncorporation) throws ResourseNotFoundException {
@@ -39,12 +43,9 @@ public class BusinessIncorporationService {
     }
 
     public BusinessIncorporation getBusinessIncorporation(String mid) throws ResourseNotFoundException {
-        return businessIncoperationByMid(mid);
-    }
-
-    public BusinessIncorporation businessIncoperationByMid(String mid) throws ResourseNotFoundException {
         BusinessIncorporation businessIncorporation = businessIncorporationRepository.findByMid(mid)
                 .orElseThrow(() -> new ResourseNotFoundException("Provided Merchant Id is not valid"));
         return !ObjectUtils.isEmpty(businessIncorporation) ? businessIncorporation : null;
     }
-}
+
+    }

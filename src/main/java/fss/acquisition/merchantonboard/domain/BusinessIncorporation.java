@@ -18,12 +18,13 @@ public class BusinessIncorporation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonIgnore
+    /*@JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    private Long id;*/
 
+    @Id
     @Column(name = "mid")
     private String mid;
 
@@ -51,9 +52,9 @@ public class BusinessIncorporation implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    /*@JsonBackReference
+    @JsonBackReference(value = "business-incorporation")
     @OneToOne(mappedBy = "businessIncorporation")
-    private GstinDeatils gstinDeatils;*/
+    private GstinDeatils gstinDeatils;
 
     @ApiModelProperty(hidden = true)
     @JsonManagedReference(value = "business-incorporation")
@@ -61,7 +62,7 @@ public class BusinessIncorporation implements Serializable {
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
     private Business business;
 
-    public Long getId() {
+   /* public Long getId() {
         return id;
     }
 
@@ -72,7 +73,7 @@ public class BusinessIncorporation implements Serializable {
     public BusinessIncorporation id(Long id) {
         this.id = id;
         return this;
-    }
+    }*/
 
     public String getMid() {
         return this.mid;
@@ -181,7 +182,7 @@ public class BusinessIncorporation implements Serializable {
         this.gstinDeatils = gstinDeatils;
     }
 */
-    @Override
+   /* @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -190,7 +191,7 @@ public class BusinessIncorporation implements Serializable {
             return false;
         }
         return id != null && id.equals(((BusinessIncorporation) o).id);
-    }
+    }*/
 
     @Override
     public int hashCode() {
@@ -201,7 +202,7 @@ public class BusinessIncorporation implements Serializable {
     @Override
     public String toString() {
         return "BusinessIncoperation{" +
-                "id=" + getId() +
+              //  "id=" + getId() +
                 ", mid='" + getMid() + "'" +
                 ", incorporationno='" + getIncorporationno() + "'" +
                 ", businessregisteredaddress='" + getBusinessregisteredaddress() + "'" +

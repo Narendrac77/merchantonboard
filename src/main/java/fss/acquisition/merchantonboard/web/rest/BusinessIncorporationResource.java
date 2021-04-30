@@ -38,7 +38,7 @@ public class BusinessIncorporationResource {
 
     @PostMapping("/business-incoperations")
     public String createBusinessIncoperation(@Valid @RequestBody BusinessIncorporation businessIncorporation)
-        throws ResourseNotFoundException {
+            throws Exception {
         log.debug("REST request to save BusinessIncoperation : {}", businessIncorporation);
         businessIncorporationService.createBusinessIncorporation(businessIncorporation);
         return "Created Successfully";

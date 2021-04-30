@@ -44,7 +44,7 @@ public class BusinessPanResource {
     public String createBusinessPan(@Valid @RequestBody BusinessPan businessPan) throws Exception {
         log.debug("REST request to save BusinessPan : {}", businessPan);
         String result = businessPanService.createBusinessPan(businessPan);
-        return result ;
+            return result ;
     }
 
     @PutMapping("/business-pans/{mid}")

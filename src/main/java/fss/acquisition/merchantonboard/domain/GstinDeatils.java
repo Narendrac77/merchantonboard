@@ -46,11 +46,11 @@ public class GstinDeatils implements Serializable {
     private Status status;
 
 
-    /*@ApiModelProperty(hidden = true)
+    @ApiModelProperty(hidden = true)
     @OneToOne
-    @JsonManagedReference
+    @JsonManagedReference(value = "business-incorporation")
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
-    private BusinessIncorporation businessIncorporation;*/
+    private BusinessIncorporation businessIncorporation;
 
     public Long getId() {
         return id;
@@ -131,13 +131,13 @@ public class GstinDeatils implements Serializable {
         this.status = status;
     }
 
-    /*public BusinessIncorporation getBusinessIncorporation() {
+    public BusinessIncorporation getBusinessIncorporation() {
         return businessIncorporation;
     }
 
     public void setBusinessIncorporation(BusinessIncorporation businessIncorporation) {
         this.businessIncorporation = businessIncorporation;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {

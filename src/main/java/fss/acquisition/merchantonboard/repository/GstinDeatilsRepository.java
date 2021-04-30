@@ -13,4 +13,6 @@ public interface GstinDeatilsRepository extends JpaRepository<GstinDeatils, Long
     Optional<GstinDeatils> findByMid(String mid);
 
     void deleteByMid(String mid);
+
+    boolean existsByMidAndGstinno(String mid,String gstin);
 }

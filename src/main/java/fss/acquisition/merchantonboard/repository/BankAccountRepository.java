@@ -14,4 +14,8 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
     Optional<BankAccount> findByMid(String mid);
 
     void deleteByMid(String mid);
+
+    boolean existsByMidAndAccountno(String Mid, String AccountNo);
+
+
 }

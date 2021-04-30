@@ -44,13 +44,19 @@ public class GstinService {
 
     public String createGstIn(GstinDeatils gstinDeatils) throws Exception {
         BusinessIncorporation businessIncorporation = businessIncorporationService.getBusinessIncorporation(gstinDeatils.getMid());
+        boolean existsByMidAndGstinno = gstinDeatilsRepository.existsByMidAndGstinno(gstinDeatils.getMid(), gstinDeatils.getGstinno());
+        if(Boolean.TRUE==existsByMidAndGstinno){
+            throw new Exception("Mid and GSTIN are already exists");
+        }
         Business business = businessService.getBusinessbyMid(gstinDeatils.getMid());
         if (!(business.getBusinessverification() == 1))
             throw new Exception("Gstin verification is not requires for entered mid " + gstinDeatils.getMid());
-        BusinessPan businessPan = businessPanRepository.findByMid(gstinDeatils.getMid())
-                .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + gstinDeatils.getMid()));
-        if (!(businessPan.getStatus().equals(Status.APPROVED)))
-            throw new Exception("Business Pan must verify first ");
+        if(business.getIdentityverification()==1) {
+            BusinessPan businessPan = businessPanRepository.findByMid(gstinDeatils.getMid())
+                    .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + gstinDeatils.getMid()));
+            if (!(businessPan.getStatus().equals(Status.APPROVED)))
+                throw new Exception("Business Pan must verify first ");
+        }
         Status status = getStatus(gstinDeatils);
         gstinDeatils.setStatus(status);
         gstinDeatilsRepository.save(gstinDeatils);
@@ -84,14 +90,6 @@ public class GstinService {
 
 
     public Status getStatus(GstinDeatils gstinDeatils) {
-        return status(gstinDeatils.getGstinno());
-    }
-
-
-    public Status status(String gstinNumber) {
-        Optional<Gstinverification> gstinverificationOptional = gstinverificationRepository.findByGstinverificationId(Integer.valueOf(gstinNumber));
-        return gstinverificationOptional.isPresent() ? Status.APPROVED : Status.DECLINED;
-    }
-
-
+        Optional<Gstinverification> gstinverificationOptional = gstinverificationRepository.findByGstinverificationId(Integer.valueOf(gstinDeatils.getGstinno()));
+        return gstinverificationOptional.isPresent() ? Status.APPROVED : Status.DECLINED;    }
 }

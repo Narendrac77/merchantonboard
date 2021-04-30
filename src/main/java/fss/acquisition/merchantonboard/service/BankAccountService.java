@@ -41,16 +41,21 @@ public class BankAccountService {
 
     public String createBankAccount(BankAccount bankAccount) throws Exception {
         Business business = businessService.getBusinessbyMid(bankAccount.getMid());
-        if (!(business.getAccountverification() == 1))
-            throw new Exception("account verification is not requires for entered mid " + bankAccount.getMid());
-        BusinessPan businessPan = businessPanRepository.findByMid(bankAccount.getMid())
-                .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + bankAccount.getMid()));
-        if (!(businessPan.getStatus().equals(Status.APPROVED)))
-            throw new Exception("Business Pan must verify first ");
-        GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(bankAccount.getMid())
-                .orElseThrow(() -> new ResourseNotFoundException("GstinDeatils is not available for entered Mid " + bankAccount.getMid()));
-        if (!(gstinDeatils.getStatus().equals(Status.APPROVED)))
-            throw new Exception("Gstin must verify first ");
+        boolean exitsByMidAndAccountno = bankAccountRepository.existsByMidAndAccountno(bankAccount.getMid(), bankAccount.getAccountno());
+        if(Boolean.TRUE==exitsByMidAndAccountno)
+            throw  new Exception("Mid and account Number are already registered ");
+        if(business.getIdentityverification()==1) {
+            BusinessPan businessPan = businessPanRepository.findByMid(bankAccount.getMid())
+                    .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + bankAccount.getMid()));
+            if (!(businessPan.getStatus().equals(Status.APPROVED)))
+                throw new Exception("Business Pan must verify first ");
+        }
+        if (business.getBusinessverification() == 1) {
+            GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(bankAccount.getMid())
+                    .orElseThrow(() -> new ResourseNotFoundException("GstinDeatils is not available for entered Mid " + bankAccount.getMid()));
+            if (!(gstinDeatils.getStatus().equals(Status.APPROVED)))
+                throw new Exception("Gstin must verify first ");
+        }
             bankAccount.setStatus(getStatus(bankAccount));
             bankAccountRepository.save(bankAccount);
             return String.valueOf(bankAccount.getStatus());
@@ -81,13 +86,8 @@ public class BankAccountService {
 
 
     public Status getStatus(BankAccount bankAccount) {
-        return status(bankAccount.getAccountno());
-    }
-
-    public Status status(String accountNumber) {
-        Optional<Bankverification> bankverificationOptional = bankverificationRepository.findByBankverificationId(Integer.valueOf(accountNumber));
+        Optional<Bankverification> bankverificationOptional = bankverificationRepository.findByBankverificationId(Integer.valueOf(bankAccount.getAccountno()));
         return bankverificationOptional.isPresent() ? Status.APPROVED : Status.DECLINED;
     }
-
 
 }
