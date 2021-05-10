@@ -23,7 +23,7 @@ public class Business implements Serializable {
     private Long businessid;
 
 
-    @Column(name = "displayname")
+    @Column(name = "displayname",unique = true)
     private String displayname;
 
     @Column(name = "businesstype")

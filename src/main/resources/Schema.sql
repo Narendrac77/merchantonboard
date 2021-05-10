@@ -18,21 +18,21 @@ DROP TABLE IF EXISTS panverification;
 
 CREATE TABLE panverification(
 Id INTEGER  PRIMARY KEY,
-  panverificationid INTEGER
+  panverificationid VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS bankverification;
 
 CREATE TABLE bankverification(
 Id INTEGER  PRIMARY KEY,
-bankverificationid INTEGER
+bankverificationid VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS gstinverification;
 
 CREATE TABLE gstinverification(
 Id INTEGER PRIMARY KEY,
-gstinverificationid INTEGER
+gstinverificationid VARCHAR(255)
 );
 
 

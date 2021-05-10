@@ -31,11 +31,11 @@ public class BusinessOwner implements Serializable {
     private String name;
 
     @NotNull
-    @Column(name = "mobileno", nullable = false)
+    @Column(name = "mobileno", nullable = false,unique = true)
     private String mobileno;
 
     @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false,unique = true)
     private String email;
 
     @NotNull

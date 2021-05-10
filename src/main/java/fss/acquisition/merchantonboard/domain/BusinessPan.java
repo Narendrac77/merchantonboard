@@ -29,7 +29,7 @@ public class BusinessPan implements Serializable {
     private String mid;
 
     @NotNull
-    @Column(name = "panno", nullable = false)
+    @Column(name = "panno", nullable = false,unique = true)
     private String panno;
 
     @Lob

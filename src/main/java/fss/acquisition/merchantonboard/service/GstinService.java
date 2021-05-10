@@ -8,6 +8,7 @@ import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.verification.Gstinverification;
 import fss.acquisition.merchantonboard.repository.BusinessIncorporationRepository;
 import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
+import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.repository.GstinDeatilsRepository;
 import fss.acquisition.merchantonboard.repository.verification.GstinverificationRepository;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
@@ -42,16 +43,19 @@ public class GstinService {
     @Autowired
     BusinessIncorporationRepository businessIncorporationRepository;
 
+    @Autowired
+    BusinessRepository businessRepository;
+
     public String createGstIn(GstinDeatils gstinDeatils) throws Exception {
         BusinessIncorporation businessIncorporation = businessIncorporationService.getBusinessIncorporation(gstinDeatils.getMid());
         boolean existsByMidAndGstinno = gstinDeatilsRepository.existsByMidAndGstinno(gstinDeatils.getMid(), gstinDeatils.getGstinno());
-        if(Boolean.TRUE==existsByMidAndGstinno){
+        if (Boolean.TRUE == existsByMidAndGstinno) {
             throw new Exception("Mid and GSTIN are already exists");
         }
         Business business = businessService.getBusinessbyMid(gstinDeatils.getMid());
         if (!(business.getBusinessverification() == 1))
             throw new Exception("Gstin verification is not requires for entered mid " + gstinDeatils.getMid());
-        if(business.getIdentityverification()==1) {
+        if (business.getIdentityverification() == 1||business.getIdentityverification() == 3) {
             BusinessPan businessPan = businessPanRepository.findByMid(gstinDeatils.getMid())
                     .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + gstinDeatils.getMid()));
             if (!(businessPan.getStatus().equals(Status.APPROVED)))
@@ -62,6 +66,10 @@ public class GstinService {
         gstinDeatilsRepository.save(gstinDeatils);
         businessIncorporation.setStatus(gstinDeatils.getStatus());
         businessIncorporationRepository.save(businessIncorporation);
+        if (Status.APPROVED.equals(status))
+            business.setBusinessverification(2);
+        else
+            business.setBusinessverification(3);
         return String.valueOf(gstinDeatils.getStatus());
     }
 
@@ -90,6 +98,7 @@ public class GstinService {
 
 
     public Status getStatus(GstinDeatils gstinDeatils) {
-        Optional<Gstinverification> gstinverificationOptional = gstinverificationRepository.findByGstinverificationId(Integer.valueOf(gstinDeatils.getGstinno()));
-        return gstinverificationOptional.isPresent() ? Status.APPROVED : Status.DECLINED;    }
+        Optional<Gstinverification> gstinverificationOptional = gstinverificationRepository.findByGstinverificationId(gstinDeatils.getGstinno());
+        return gstinverificationOptional.isPresent() ? Status.APPROVED : Status.DECLINED;
+    }
 }

@@ -25,7 +25,7 @@ public class AadharDetails implements Serializable {
 
 
     @NotNull
-    @Column(name = "aadharno", nullable = false)
+    @Column(name = "aadharno", nullable = false,unique = true)
     private String aadharno;
 
     @NotNull

@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PanverificationRepository extends JpaRepository<Panverification, Integer> {
 
- Optional<Panverification> findByPanverificationId(Integer id);
+ Optional<Panverification> findByPanverificationId(String id);
 
 }

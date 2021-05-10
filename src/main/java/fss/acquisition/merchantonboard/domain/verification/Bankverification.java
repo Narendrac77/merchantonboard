@@ -19,7 +19,7 @@ public class Bankverification implements Serializable {
     private Integer id;
 
     @Column(name = "bankverificationid")
-    private Integer bankverificationId;
+    private String bankverificationId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Integer getId() {
@@ -30,19 +30,18 @@ public class Bankverification implements Serializable {
         this.id = id;
     }
 
-    public Integer getBankverificationId() {
+    public String getBankverificationId() {
         return bankverificationId;
     }
 
-    public Bankverification bankverificationId(Integer bankverificationId) {
+    public Bankverification bankverificationId(String bankverificationId) {
         this.bankverificationId = bankverificationId;
         return this;
     }
 
-    public void setBankverificationId(Integer bankverificationId) {
+    public void setBankverificationId(String bankverificationId) {
         this.bankverificationId = bankverificationId;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

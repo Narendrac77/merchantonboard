@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface BankverificationRepository extends JpaRepository<Bankverification, Integer> {
 
    // @Query(value = "SELECT * from BANKVERIFICATION WHERE bankverification_id = ?1",nativeQuery = true)
-    Optional<Bankverification> findByBankverificationId(Integer id);
+    Optional<Bankverification> findByBankverificationId(String id);
 }

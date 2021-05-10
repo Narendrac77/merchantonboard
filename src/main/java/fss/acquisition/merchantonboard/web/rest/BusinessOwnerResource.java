@@ -1,5 +1,6 @@
 package fss.acquisition.merchantonboard.web.rest;
 
+
 import fss.acquisition.merchantonboard.domain.BusinessOwner;
 import fss.acquisition.merchantonboard.repository.BusinessOwnerRepository;
 import fss.acquisition.merchantonboard.service.BusinessOwnerService;
@@ -8,19 +9,20 @@ import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.xml.namespace.QName;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
+import java.util.*;
 
 
 @RestController
@@ -127,4 +129,5 @@ public class BusinessOwnerResource {
         businessOwnerRepository.deleteByMobileno(mobileno);
         return "Deleted Successfully";
     }
+
 }

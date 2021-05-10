@@ -19,7 +19,7 @@ public class Gstinverification implements Serializable {
     private Integer id;
 
     @Column(name = "gstinverificationid")
-    private Integer gstinverificationId;
+    private String gstinverificationId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Integer getId() {
@@ -30,16 +30,16 @@ public class Gstinverification implements Serializable {
         this.id = id;
     }
 
-    public Integer getGstinverificationId() {
+    public String getGstinverificationId() {
         return gstinverificationId;
     }
 
-    public Gstinverification gstinverificationId(Integer gstinverificationId) {
+    public Gstinverification gstinverificationId(String gstinverificationId) {
         this.gstinverificationId = gstinverificationId;
         return this;
     }
 
-    public void setGstinverificationId(Integer gstinverificationId) {
+    public void setGstinverificationId(String gstinverificationId) {
         this.gstinverificationId = gstinverificationId;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -1,9 +1,12 @@
 package fss.acquisition.merchantonboard.service;
 
 import fss.acquisition.merchantonboard.dao.BusinessDao;
+import fss.acquisition.merchantonboard.dao.BusinessStatusDao;
+import fss.acquisition.merchantonboard.dao.VerifiactionStatus;
 import fss.acquisition.merchantonboard.dao.VerificationCheck;
 import fss.acquisition.merchantonboard.dao.enumeration.RiskEnum;
 import fss.acquisition.merchantonboard.domain.Business;
+import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.metadata.Categories;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.repository.metadata.CategoriesRepository;
@@ -38,7 +41,7 @@ public class BusinessService {
     SubCategoriesRepository subCategoriesRepository;
 
     public BusinessDao createBusiness(Business business) throws Exception {
-       businessOwnerService.getBusinessOwnerbyId(business.getBusinessid());
+        businessOwnerService.getBusinessOwnerbyId(business.getBusinessid());
         displayNameCheck(business.getDisplayname());
         String getUUid = generateUUid();
         Integer mccCode = getCategoriesId(Integer.valueOf(business.getBusinesscategory()));
@@ -46,9 +49,10 @@ public class BusinessService {
         business.setMid(getUUid);
         RiskEnum riskEnum = generateRisk(mccCode, business.getTurnover());
         business.setRiskscoring(riskScoringNumber(riskEnum));
+        business.setStatus(Status.PROCESSING);
         getVerificationPriority(business);
         businessRepository.save(business);
-        BusinessDao businessDao = getBusinessDao(business,riskEnum);
+        BusinessDao businessDao = getBusinessDao(business, riskEnum);
         return businessDao;
     }
 
@@ -117,11 +121,11 @@ public class BusinessService {
 
     public RiskEnum generateRisk(Integer mccCode, BigInteger turnOver) throws Exception {
         RiskEnum riskEnum = null;
-        if (mccCode.equals(1)) {
+        if (mccCode.equals(1) || (turnOver.longValue() >= 10000000)) {
             if (!(turnOver.longValue() >= 10000000))
                 throw new Exception("turnover must be above 1crore");
             riskEnum = RiskEnum.HIGHRISK;
-        } else if (mccCode.equals(2)) {
+        } else if (mccCode.equals(2) || (turnOver.longValue() >= 100000)) {
             if (!((turnOver.longValue() >= 100000) && (turnOver.longValue() < 10000000)))
                 throw new Exception("turnover must be above 1lakh and below 1crore");
             riskEnum = RiskEnum.MEDIUMRISK;
@@ -133,7 +137,7 @@ public class BusinessService {
         return riskEnum;
     }
 
-    public BusinessDao getBusinessDao(Business business,RiskEnum riskEnum) {
+    public BusinessDao getBusinessDao(Business business, RiskEnum riskEnum) {
         BusinessDao businessDao = new BusinessDao();
         businessDao.setMid(String.valueOf(business.getMid()));
         businessDao.setRiskEnum(riskEnum);
@@ -145,18 +149,18 @@ public class BusinessService {
         return businessDao;
     }
 
-    public Business getVerificationPriority(Business business){
-        if(business.getRiskscoring()==1) {
+    public Business getVerificationPriority(Business business) {
+        if (business.getRiskscoring() == 1) {
             business.setBusinessverification(1);
             business.setIdentityverification(1);
             business.setAccountverification(1);
         }
-        if(business.getRiskscoring()==2){
+        if (business.getRiskscoring() == 2) {
             business.setBusinessverification(0);
             business.setIdentityverification(1);
             business.setAccountverification(1);
         }
-        if(business.getRiskscoring()==3){
+        if (business.getRiskscoring() == 3) {
             business.setBusinessverification(0);
             business.setIdentityverification(0);
             business.setAccountverification(1);
@@ -173,6 +177,34 @@ public class BusinessService {
         if (riskEnum.equals(RiskEnum.LOWRISK))
             riskNumber = 3;
         return riskNumber;
+    }
+
+    public BusinessStatusDao getBusinessStatus(String mid) throws ResourseNotFoundException {
+        Business business = businessRepository.findBusinessByMid(mid)
+                .orElseThrow(() -> new ResourseNotFoundException("Resource not for entered mid " + mid));
+        BusinessStatusDao businessStatusDao = new BusinessStatusDao();
+        VerifiactionStatus verifiactionStatus = new VerifiactionStatus();
+        if(business.identityverification==1)
+            verifiactionStatus.setIdentityVerification(String.valueOf(Status.PROCESSING));
+        else if(business.identityverification==2)
+            verifiactionStatus.setIdentityVerification(String.valueOf(Status.APPROVED));
+        else if(business.identityverification==3)
+            verifiactionStatus.setIdentityVerification(String.valueOf(Status.DECLINED));
+        if(business.businessverification==1)
+            verifiactionStatus.setBusinessverification(String.valueOf(Status.PROCESSING));
+        else if(business.businessverification==2)
+            verifiactionStatus.setBusinessverification(String.valueOf(Status.APPROVED));
+        else if(business.businessverification==3)
+            verifiactionStatus.setBusinessverification(String.valueOf(Status.DECLINED));
+        if(business.accountverification==1)
+            verifiactionStatus.setAccountVerification(String.valueOf(Status.PROCESSING));
+        else if(business.accountverification==2)
+            verifiactionStatus.setAccountVerification(String.valueOf(Status.APPROVED));
+        else if(business.accountverification==3)
+            verifiactionStatus.setAccountVerification(String.valueOf(Status.DECLINED));
+        businessStatusDao.setVerifiactionStatus(verifiactionStatus);
+        businessStatusDao.setBankStatus(business.getStatus());
+        return businessStatusDao;
     }
 
 

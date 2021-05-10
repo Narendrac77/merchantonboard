@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface GstinverificationRepository extends JpaRepository<Gstinverification, Integer> {
 
-    Optional<Gstinverification> findByGstinverificationId(Integer id);
+    Optional<Gstinverification> findByGstinverificationId(String id);
 }

@@ -30,7 +30,7 @@ public class BankAccount implements Serializable {
     private String mid;
 
     @NotNull
-    @Column(name = "accountno", nullable = false)
+    @Column(name = "accountno", nullable = false,unique = true)
     private String accountno;
 
     @NotNull

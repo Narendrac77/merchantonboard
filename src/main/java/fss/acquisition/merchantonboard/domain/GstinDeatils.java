@@ -30,7 +30,7 @@ public class GstinDeatils implements Serializable {
     private String mid;
 
     @NotNull
-    @Column(name = "gstinno", nullable = false)
+    @Column(name = "gstinno", nullable = false,unique = true)
     private String gstinno;
 
     @Lob

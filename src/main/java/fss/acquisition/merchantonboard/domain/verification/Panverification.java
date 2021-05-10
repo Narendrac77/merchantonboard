@@ -18,7 +18,7 @@ public class Panverification implements Serializable {
     private Integer id;
 
     @Column(name = "panverificationid")
-    private Integer panverificationId;
+    private String panverificationId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Integer getId() {
@@ -29,19 +29,18 @@ public class Panverification implements Serializable {
         this.id = id;
     }
 
-    public Integer getPanverificationId() {
+    public String getPanverificationId() {
         return panverificationId;
     }
 
-    public Panverification panverificationId(Integer panverificationId) {
+    public Panverification panverificationId(String panverificationId) {
         this.panverificationId = panverificationId;
         return this;
     }
 
-    public void setPanverificationId(Integer panverificationId) {
+    public void setPanverificationId(String panverificationId) {
         this.panverificationId = panverificationId;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

@@ -38,6 +38,11 @@ public class BusinessPanService {
         businesspanCheck(businessPan.getMid());
         businessPan.setStatus(getStatus(businessPan));
         businessPanRepository.save(businessPan);
+        if (Status.APPROVED.equals(getStatus(businessPan)))
+            business.setIdentityverification(2);
+        else
+            business.setIdentityverification(3);
+        businessRepository.save(business);
         return String.valueOf(businessPan.getStatus());
     }
 
@@ -67,13 +72,10 @@ public class BusinessPanService {
 
 
     public Status getStatus(BusinessPan businessPan) {
-        return status(businessPan.getPanno());
-    }
-
-    public Status status(String panNumber) {
-        Optional<Panverification> panverificationOptional = panverificationRepository.findByPanverificationId(Integer.valueOf(panNumber));
+        Optional<Panverification> panverificationOptional = panverificationRepository.findByPanverificationId(businessPan.getPanno());
         return panverificationOptional.isPresent() ? Status.APPROVED : Status.DECLINED;
     }
+
 
     public void businesspanCheck(String mid) throws Exception {
         Optional<BusinessPan> businessPan = businessPanRepository.findByMid(mid);

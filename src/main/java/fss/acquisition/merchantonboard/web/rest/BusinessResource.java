@@ -1,6 +1,7 @@
 package fss.acquisition.merchantonboard.web.rest;
 
 import fss.acquisition.merchantonboard.dao.BusinessDao;
+import fss.acquisition.merchantonboard.dao.BusinessStatusDao;
 import fss.acquisition.merchantonboard.domain.Business;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.service.BusinessService;
@@ -144,5 +145,11 @@ public class BusinessResource {
         log.debug("REST request to delete Business : {}", id);
         businessRepository.deleteByBusinessid(id);
         return "Deleted Successfully";
+    }
+
+    @GetMapping("/business/{mid}/status")
+    public BusinessStatusDao getStatus(@PathVariable String mid) throws ResourseNotFoundException {
+        log.debug("REST request to delete Business : {}", mid);
+        return businessService.getBusinessStatus(mid);
     }
 }
