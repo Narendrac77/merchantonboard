@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
 
 
 @Entity
-@Table(name = "business_incoperation")
+@Table(name = "businessincorporation")
 public class BusinessIncorporation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,9 +52,9 @@ public class BusinessIncorporation implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @JsonBackReference(value = "business-incorporation")
+    /*@JsonBackReference(value = "business-incorporation")
     @OneToOne(mappedBy = "businessIncorporation")
-    private GstinDeatils gstinDeatils;
+    private GstinDeatils gstinDeatils;*/
 
     @ApiModelProperty(hidden = true)
     @JsonManagedReference(value = "business-incorporation")

@@ -1,15 +1,9 @@
 package fss.acquisition.merchantonboard.service;
 
-import fss.acquisition.merchantonboard.domain.BankAccount;
-import fss.acquisition.merchantonboard.domain.Business;
-import fss.acquisition.merchantonboard.domain.BusinessPan;
-import fss.acquisition.merchantonboard.domain.GstinDeatils;
+import fss.acquisition.merchantonboard.domain.*;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.verification.Bankverification;
-import fss.acquisition.merchantonboard.repository.BankAccountRepository;
-import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
-import fss.acquisition.merchantonboard.repository.BusinessRepository;
-import fss.acquisition.merchantonboard.repository.GstinDeatilsRepository;
+import fss.acquisition.merchantonboard.repository.*;
 import fss.acquisition.merchantonboard.repository.verification.BankverificationRepository;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
@@ -43,21 +37,30 @@ public class BankAccountService {
     @Autowired
     BusinessRepository businessRepository;
 
+    @Autowired
+    AadharDetailsRepository aadharDetailsRepository;
+
     public String createBankAccount(BankAccount bankAccount) throws Exception {
         Business business = businessService.getBusinessbyMid(bankAccount.getMid());
         boolean exitsByMidAndAccountno = bankAccountRepository.existsByMidAndAccountno(bankAccount.getMid(), bankAccount.getAccountno());
         if (Boolean.TRUE == exitsByMidAndAccountno)
             throw new Exception("Mid and account Number are already registered ");
         if (business.getIdentityverification() == 1||business.getIdentityverification() == 3) {
+            AadharDetails aadharDetails = aadharDetailsRepository.findByMid(bankAccount.getMid())
+                    .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + bankAccount.getMid()));
+            if (!(aadharDetails.getStatus().equals(Status.APPROVED)))
+                throw new Exception("Aadhar must verify first ");
+        }
+        if (business.getBusinessverificationpan() == 1||business.getBusinessverificationpan() == 3) {
             BusinessPan businessPan = businessPanRepository.findByMid(bankAccount.getMid())
                     .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + bankAccount.getMid()));
             if (!(businessPan.getStatus().equals(Status.APPROVED)))
                 throw new Exception("Business Pan must verify first ");
         }
-        if (business.getBusinessverification() == 1||business.getBusinessverification() == 3) {
-            GstinDeatils gstinDeatils = gstinDeatilsRepository.findByMid(bankAccount.getMid())
+        if (business.getBusinessverificationgstin() == 1||business.getBusinessverificationgstin() == 3) {
+            GstinDetails gstinDetails = gstinDeatilsRepository.findByMid(bankAccount.getMid())
                     .orElseThrow(() -> new ResourseNotFoundException("GstinDeatils is not available for entered Mid " + bankAccount.getMid()));
-            if (!(gstinDeatils.getStatus().equals(Status.APPROVED)))
+            if (!(gstinDetails.getStatus().equals(Status.APPROVED)))
                 throw new Exception("Gstin must verify first ");
         }
         bankAccount.setStatus(getStatus(bankAccount));

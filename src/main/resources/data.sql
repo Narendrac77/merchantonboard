@@ -350,3 +350,10 @@ INSERT INTO gstinverification(id,gstinverificationid) VALUES
 (1014,'1234567896'),
 (1015,'1234567895');
 
+INSERT INTO aadharverification(id,aadharverificationid) VALUES
+(1011,'123456789923'),
+(1012,'123456789812'),
+(1013,'123456789725'),
+(1014,'123456789626'),
+(1015,'123456789527');
+

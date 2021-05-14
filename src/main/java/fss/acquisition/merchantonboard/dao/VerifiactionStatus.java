@@ -3,17 +3,11 @@ package fss.acquisition.merchantonboard.dao;
 
 public class VerifiactionStatus {
 
-    private String businessverification;
+
     private String identityVerification;
+    private String businessverificationpan;
+    private String businessverificationgstin;
     private String accountVerification;
-
-    public String getBusinessverification() {
-        return businessverification;
-    }
-
-    public void setBusinessverification(String businessverification) {
-        this.businessverification = businessverification;
-    }
 
     public String getIdentityVerification() {
         return identityVerification;
@@ -21,6 +15,22 @@ public class VerifiactionStatus {
 
     public void setIdentityVerification(String identityVerification) {
         this.identityVerification = identityVerification;
+    }
+
+    public String getBusinessverificationpan() {
+        return businessverificationpan;
+    }
+
+    public void setBusinessverificationpan(String businessverificationpan) {
+        this.businessverificationpan = businessverificationpan;
+    }
+
+    public String getBusinessverificationgstin() {
+        return businessverificationgstin;
+    }
+
+    public void setBusinessverificationgstin(String businessverificationgstin) {
+        this.businessverificationgstin = businessverificationgstin;
     }
 
     public String getAccountVerification() {
@@ -34,9 +44,10 @@ public class VerifiactionStatus {
     @Override
     public String toString() {
         return "VerifiactionStatus{" +
-                "businessverification=" + businessverification +
-                ", identityVerification=" + identityVerification +
-                ", accountVerification=" + accountVerification +
+                "identityVerification='" + identityVerification + '\'' +
+                ", businessverificationpan='" + businessverificationpan + '\'' +
+                ", businessverificationgstin='" + businessverificationgstin + '\'' +
+                ", accountVerification='" + accountVerification + '\'' +
                 '}';
     }
 }

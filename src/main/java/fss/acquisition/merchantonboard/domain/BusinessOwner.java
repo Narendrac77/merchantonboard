@@ -43,9 +43,9 @@ public class BusinessOwner implements Serializable {
     private String address;
 
    // @JsonIgnoreProperties( allowSetters = true)
-    @OneToOne(mappedBy = "businessOwner")
+    /*@OneToOne(mappedBy = "businessOwner")
     @JsonBackReference(value = "aadhar-details")
-    private AadharDetails aadharDetails;
+    private AadharDetails aadharDetails;*/
 
     @OneToMany(mappedBy = "businessOwner")
     @JsonManagedReference(value = "business-owner")
@@ -116,7 +116,7 @@ public class BusinessOwner implements Serializable {
         this.address = address;
     }
 
-    public AadharDetails getAadharDetails() {
+    /*public AadharDetails getAadharDetails() {
         return this.aadharDetails;
     }
 
@@ -128,7 +128,7 @@ public class BusinessOwner implements Serializable {
     public void setAadharDetails(AadharDetails aadharDetails) {
         this.aadharDetails = aadharDetails;
     }
-
+*/
 
     @Override
     public boolean equals(Object o) {

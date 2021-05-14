@@ -13,7 +13,11 @@ import java.util.Optional;
 @Repository
 public interface AadharDetailsRepository extends JpaRepository<AadharDetails, Long> {
 
-    Optional<AadharDetails> findByBusinessid(Long id);
+    //Optional<AadharDetails> findByBusinessid(Long id);
 
-    void deleteBybusinessid(Long id);
+    //void deleteBybusinessid(Long id);
+
+    Optional<AadharDetails> findByMid(String mid);
+
+    boolean existsByAadharno(String aadharNo);
 }

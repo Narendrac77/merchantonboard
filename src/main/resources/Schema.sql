@@ -35,5 +35,12 @@ Id INTEGER PRIMARY KEY,
 gstinverificationid VARCHAR(255)
 );
 
+DROP TABLE IF EXISTS aadharverification;
+
+CREATE TABLE aadharverification(
+Id INTEGER PRIMARY KEY,
+aadharverificationid VARCHAR(255)
+);
+
 
 

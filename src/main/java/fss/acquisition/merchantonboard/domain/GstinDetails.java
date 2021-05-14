@@ -1,9 +1,7 @@
 package fss.acquisition.merchantonboard.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -16,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "gstindetails")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class GstinDeatils implements Serializable {
+public class GstinDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,11 +44,17 @@ public class GstinDeatils implements Serializable {
     private Status status;
 
 
-    @ApiModelProperty(hidden = true)
+    /*@ApiModelProperty(hidden = true)
     @OneToOne
     @JsonManagedReference(value = "business-incorporation")
     @JoinColumn(name = "mid",insertable = false,updatable = false,unique = true,referencedColumnName = "mid")
-    private BusinessIncorporation businessIncorporation;
+    private BusinessIncorporation businessIncorporation;*/
+
+    @ApiModelProperty(hidden = true)
+    @JsonManagedReference(value = "gstin-Details")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mid", insertable = false, updatable = false,referencedColumnName = "mid")
+    private Business business;
 
     public Long getId() {
         return id;
@@ -60,7 +64,7 @@ public class GstinDeatils implements Serializable {
         this.id = id;
     }
 
-    public GstinDeatils id(Long id) {
+    public GstinDetails id(Long id) {
         this.id = id;
         return this;
     }
@@ -70,7 +74,7 @@ public class GstinDeatils implements Serializable {
         return this.mid;
     }
 
-    public GstinDeatils mid(String mid) {
+    public GstinDetails mid(String mid) {
         this.mid = mid;
         return this;
     }
@@ -83,7 +87,7 @@ public class GstinDeatils implements Serializable {
         return this.gstinno;
     }
 
-    public GstinDeatils gstinno(String gstinno) {
+    public GstinDetails gstinno(String gstinno) {
         this.gstinno = gstinno;
         return this;
     }
@@ -96,7 +100,7 @@ public class GstinDeatils implements Serializable {
         return this.gstindoc;
     }
 
-    public GstinDeatils gstindoc(byte[] gstindoc) {
+    public GstinDetails gstindoc(byte[] gstindoc) {
         this.gstindoc = gstindoc;
         return this;
     }
@@ -109,7 +113,7 @@ public class GstinDeatils implements Serializable {
         return this.gstindocContentType;
     }
 
-    public GstinDeatils gstindocContentType(String gstindocContentType) {
+    public GstinDetails gstindocContentType(String gstindocContentType) {
         this.gstindocContentType = gstindocContentType;
         return this;
     }
@@ -122,7 +126,7 @@ public class GstinDeatils implements Serializable {
         return this.status;
     }
 
-    public GstinDeatils status(Status status) {
+    public GstinDetails status(Status status) {
         this.status = status;
         return this;
     }
@@ -131,12 +135,20 @@ public class GstinDeatils implements Serializable {
         this.status = status;
     }
 
-    public BusinessIncorporation getBusinessIncorporation() {
+   /* public BusinessIncorporation getBusinessIncorporation() {
         return businessIncorporation;
     }
 
     public void setBusinessIncorporation(BusinessIncorporation businessIncorporation) {
         this.businessIncorporation = businessIncorporation;
+    }*/
+
+    public Business getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(Business business) {
+        this.business = business;
     }
 
     @Override
@@ -144,10 +156,10 @@ public class GstinDeatils implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof GstinDeatils)) {
+        if (!(o instanceof GstinDetails)) {
             return false;
         }
-        return id != null && id.equals(((GstinDeatils) o).id);
+        return id != null && id.equals(((GstinDetails) o).id);
     }
 
     @Override

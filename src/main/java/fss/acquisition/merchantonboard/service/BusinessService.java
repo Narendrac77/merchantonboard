@@ -142,28 +142,30 @@ public class BusinessService {
         businessDao.setMid(String.valueOf(business.getMid()));
         businessDao.setRiskEnum(riskEnum);
         VerificationCheck verificationCheck = new VerificationCheck();
-        verificationCheck.setBusinessVerification(business.getBusinessverification());
         verificationCheck.setIdentityVerification(business.getIdentityverification());
+        verificationCheck.setBusinessVerificationpan(business.getBusinessverificationpan());
+        verificationCheck.setBusinessVerificationgstin(business.getBusinessverificationgstin());
         verificationCheck.setAccountVerification(business.getAccountverification());
         businessDao.setVerificationCheck(verificationCheck);
         return businessDao;
     }
 
     public Business getVerificationPriority(Business business) {
+        business.setAccountverification(1);
         if (business.getRiskscoring() == 1) {
-            business.setBusinessverification(1);
+            business.setBusinessverificationpan(1);
+            business.setBusinessverificationgstin(1);
             business.setIdentityverification(1);
-            business.setAccountverification(1);
         }
         if (business.getRiskscoring() == 2) {
-            business.setBusinessverification(0);
+            business.setBusinessverificationpan(0);
+            business.setBusinessverificationgstin(0);
             business.setIdentityverification(1);
-            business.setAccountverification(1);
         }
         if (business.getRiskscoring() == 3) {
-            business.setBusinessverification(0);
+            business.setBusinessverificationpan(0);
+            business.setBusinessverificationgstin(0);
             business.setIdentityverification(0);
-            business.setAccountverification(1);
         }
         return business;
     }
@@ -184,23 +186,29 @@ public class BusinessService {
                 .orElseThrow(() -> new ResourseNotFoundException("Resource not for entered mid " + mid));
         BusinessStatusDao businessStatusDao = new BusinessStatusDao();
         VerifiactionStatus verifiactionStatus = new VerifiactionStatus();
-        if(business.identityverification==1)
+        if (business.getIdentityverification() == 1)
             verifiactionStatus.setIdentityVerification(String.valueOf(Status.PROCESSING));
-        else if(business.identityverification==2)
+        else if (business.getIdentityverification() == 2)
             verifiactionStatus.setIdentityVerification(String.valueOf(Status.APPROVED));
-        else if(business.identityverification==3)
+        else if (business.getIdentityverification() == 3)
             verifiactionStatus.setIdentityVerification(String.valueOf(Status.DECLINED));
-        if(business.businessverification==1)
-            verifiactionStatus.setBusinessverification(String.valueOf(Status.PROCESSING));
-        else if(business.businessverification==2)
-            verifiactionStatus.setBusinessverification(String.valueOf(Status.APPROVED));
-        else if(business.businessverification==3)
-            verifiactionStatus.setBusinessverification(String.valueOf(Status.DECLINED));
-        if(business.accountverification==1)
+        if (business.getBusinessverificationpan() == 1)
+            verifiactionStatus.setBusinessverificationpan(String.valueOf(Status.PROCESSING));
+        else if (business.getBusinessverificationpan() == 2)
+            verifiactionStatus.setBusinessverificationpan(String.valueOf(Status.APPROVED));
+        else if (business.getBusinessverificationpan() == 3)
+            verifiactionStatus.setBusinessverificationpan(String.valueOf(Status.DECLINED));
+        if (business.getBusinessverificationgstin() == 1)
+            verifiactionStatus.setBusinessverificationgstin(String.valueOf(Status.PROCESSING));
+        else if (business.getBusinessverificationgstin() == 2)
+            verifiactionStatus.setBusinessverificationgstin(String.valueOf(Status.APPROVED));
+        else if (business.getBusinessverificationgstin() == 3)
+            verifiactionStatus.setBusinessverificationgstin(String.valueOf(Status.DECLINED));
+        if (business.accountverification == 1)
             verifiactionStatus.setAccountVerification(String.valueOf(Status.PROCESSING));
-        else if(business.accountverification==2)
+        else if (business.accountverification == 2)
             verifiactionStatus.setAccountVerification(String.valueOf(Status.APPROVED));
-        else if(business.accountverification==3)
+        else if (business.accountverification == 3)
             verifiactionStatus.setAccountVerification(String.valueOf(Status.DECLINED));
         businessStatusDao.setVerifiactionStatus(verifiactionStatus);
         businessStatusDao.setBankStatus(business.getStatus());

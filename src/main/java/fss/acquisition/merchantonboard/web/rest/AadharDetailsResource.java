@@ -40,10 +40,10 @@ public class AadharDetailsResource {
 
 
     @PostMapping("/aadhar-details")
-    public String createAadharDetails(@Valid @RequestBody AadharDetails aadharDetails) throws URISyntaxException, ResourseNotFoundException {
+    public String createAadharDetails(@Valid @RequestBody AadharDetails aadharDetails) throws Exception {
         log.debug("REST request to save AadharDetails : {}", aadharDetails);
-        aadharService.createAadharDetails(aadharDetails);
-        return "Created Successfully";
+        String aadharDetailsstatus = aadharService.createAadharDetails(aadharDetails);
+        return aadharDetailsstatus;
     }
 
     /**
@@ -65,17 +65,7 @@ public class AadharDetailsResource {
         return "Updated Successfully";
     }
 
-    /**
-     * {@code PATCH  /aadhar-details/:id} : Partial updates given fields of an existing aadharDetails, field will ignore if it is null
-     *
-     * @param id            the id of the aadharDetails to save.
-     * @param aadharDetails the aadharDetails to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated aadharDetails,
-     * or with status {@code 400 (Bad Request)} if the aadharDetails is not valid,
-     * or with status {@code 404 (Not Found)} if the aadharDetails is not found,
-     * or with status {@code 500 (Internal Server Error)} if the aadharDetails couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
+
    /* @PatchMapping(value = "/aadhar-details/{id}", consumes = "application/merge-patch+json")
     public String partialUpdateAadharDetails(
             @PathVariable(value = "id", required = false) final Long id,
@@ -126,7 +116,7 @@ public class AadharDetailsResource {
     @DeleteMapping("/aadhar-details/{id}")
     public String deleteAadharDetails(@PathVariable Long id) {
         log.debug("REST request to delete AadharDetails : {}", id);
-        aadharDetailsRepository.deleteBybusinessid(id);
+     //   aadharDetailsRepository.deleteBybusinessid(id);
         return "";
     }
 }

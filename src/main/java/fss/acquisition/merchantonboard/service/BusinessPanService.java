@@ -1,9 +1,11 @@
 package fss.acquisition.merchantonboard.service;
 
+import fss.acquisition.merchantonboard.domain.AadharDetails;
 import fss.acquisition.merchantonboard.domain.Business;
 import fss.acquisition.merchantonboard.domain.BusinessPan;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import fss.acquisition.merchantonboard.domain.verification.Panverification;
+import fss.acquisition.merchantonboard.repository.AadharDetailsRepository;
 import fss.acquisition.merchantonboard.repository.BusinessPanRepository;
 import fss.acquisition.merchantonboard.repository.BusinessRepository;
 import fss.acquisition.merchantonboard.repository.verification.PanverificationRepository;
@@ -31,17 +33,26 @@ public class BusinessPanService {
     @Autowired
     BusinessRepository businessRepository;
 
+    @Autowired
+    AadharDetailsRepository aadharDetailsRepository;
+
     public String createBusinessPan(BusinessPan businessPan) throws Exception {
         Business business = businessService.getBusinessbyMid(businessPan.getMid());
-        if (!(business.getIdentityverification() == 1))
+        if (!(business.getBusinessverificationpan() == 1))
             throw new Exception("Pan Verification is not required");
+        if (business.getIdentityverification() == 1||business.getIdentityverification() == 3) {
+            AadharDetails aadharDetails = aadharDetailsRepository.findByMid(businessPan.getMid())
+                    .orElseThrow(() -> new ResourseNotFoundException("Business Pan is not available for entered Mid " + businessPan.getMid()));
+            if (!(aadharDetails.getStatus().equals(Status.APPROVED)))
+                throw new Exception("Aadhar must verify first ");
+        }
         businesspanCheck(businessPan.getMid());
         businessPan.setStatus(getStatus(businessPan));
         businessPanRepository.save(businessPan);
         if (Status.APPROVED.equals(getStatus(businessPan)))
-            business.setIdentityverification(2);
+            business.setBusinessverificationpan(2);
         else
-            business.setIdentityverification(3);
+            business.setBusinessverificationpan(3);
         businessRepository.save(business);
         return String.valueOf(businessPan.getStatus());
     }

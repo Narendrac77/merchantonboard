@@ -28,9 +28,13 @@ public class AadharDetails implements Serializable {
     @Column(name = "aadharno", nullable = false,unique = true)
     private String aadharno;
 
-    @NotNull
+    /*@NotNull
     @Column(name = "businessid", nullable = false,unique = true)
-    private Long businessid;
+    private Long businessid;*/
+
+    @NotNull
+    @Column(name = "mid",unique = true)
+    private String mid;
 
     @Lob
     @Column(name = "aadhardoc")
@@ -44,11 +48,17 @@ public class AadharDetails implements Serializable {
     @Column(name = "status")
     private Status status;
 
-    @OneToOne
+    /*@OneToOne
     @ApiModelProperty(hidden = true)
     @JsonManagedReference(value = "aadhar-details")
     @JoinColumn(name = "businessid",insertable = false,updatable = false,unique = true)
-    private BusinessOwner businessOwner;
+    private BusinessOwner businessOwner;*/
+
+    @ApiModelProperty(hidden = true)
+    @JsonManagedReference(value = "aadhar-details")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mid", insertable = false, updatable = false,referencedColumnName = "mid")
+    private Business business;
 
     public Long getId() {
         return id;
@@ -87,14 +97,14 @@ public class AadharDetails implements Serializable {
         return this;
     }
 
-    public Long getBusinessid() {
+   /* public Long getBusinessid() {
         return businessid;
     }
 
     public void setBusinessid(Long businessid) {
         this.businessid = businessid;
     }
-
+*/
     public void setAadhardoc(byte[] aadhardoc) {
         this.aadhardoc = aadhardoc;
     }
@@ -126,16 +136,32 @@ public class AadharDetails implements Serializable {
         this.status = status;
     }
 
-    public BusinessOwner getBusinessOwner() {
-        return this.businessOwner;
+    public String getMid() {
+        return mid;
     }
 
-    public AadharDetails businessOwner(BusinessOwner businessOwner) {
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
+
+    public Business getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(Business business) {
+        this.business = business;
+    }
+
+    /* public BusinessOwner getBusinessOwner() {
+        return this.businessOwner;
+    }*/
+
+    /*public AadharDetails businessOwner(BusinessOwner businessOwner) {
         this.setBusinessOwner(businessOwner);
         return this;
-    }
+    }*/
 
-    public void setBusinessOwner(BusinessOwner businessOwner) {
+   /* public void setBusinessOwner(BusinessOwner businessOwner) {
         if (this.businessOwner != null) {
             this.businessOwner.setAadharDetails(null);
         }
@@ -143,7 +169,7 @@ public class AadharDetails implements Serializable {
             businessOwner.setAadharDetails(this);
         }
         this.businessOwner = businessOwner;
-    }
+    }*/
 
 
 

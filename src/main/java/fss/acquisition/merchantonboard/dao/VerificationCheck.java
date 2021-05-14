@@ -4,7 +4,10 @@ public class VerificationCheck {
 
     private int identityVerification;
 
-    private int businessVerification;
+    private int businessVerificationpan;
+
+    private int businessVerificationgstin;
+
 
     private int accountVerification;
 
@@ -16,13 +19,6 @@ public class VerificationCheck {
         this.identityVerification = identityVerification;
     }
 
-    public int getBusinessVerification() {
-        return businessVerification;
-    }
-
-    public void setBusinessVerification(int businessVerification) {
-        this.businessVerification = businessVerification;
-    }
 
     public int getAccountVerification() {
         return accountVerification;
@@ -32,11 +28,28 @@ public class VerificationCheck {
         this.accountVerification = accountVerification;
     }
 
+    public int getBusinessVerificationpan() {
+        return businessVerificationpan;
+    }
+
+    public void setBusinessVerificationpan(int businessVerificationpan) {
+        this.businessVerificationpan = businessVerificationpan;
+    }
+
+    public int getBusinessVerificationgstin() {
+        return businessVerificationgstin;
+    }
+
+    public void setBusinessVerificationgstin(int businessVerificationgstin) {
+        this.businessVerificationgstin = businessVerificationgstin;
+    }
+
     @Override
     public String toString() {
         return "VerificationCheck{" +
                 "identityVerification=" + identityVerification +
-                ", businessVerification=" + businessVerification +
+                ", businessVerificationpan=" + businessVerificationpan +
+                ", businessVerificationgstin=" + businessVerificationgstin +
                 ", accountVerification=" + accountVerification +
                 '}';
     }

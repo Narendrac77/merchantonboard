@@ -2,7 +2,6 @@ package fss.acquisition.merchantonboard.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fss.acquisition.merchantonboard.domain.enumeration.Status;
 import io.swagger.annotations.ApiModelProperty;
@@ -64,8 +63,12 @@ public class Business implements Serializable {
     public Integer identityverification;
 
     @JsonIgnore
-    @Column(name = "businessverification")
-    public Integer businessverification;
+    @Column(name = "businessverificationpan")
+    public Integer businessverificationpan;
+
+    @JsonIgnore
+    @Column(name = "businessverificationgstin")
+    public Integer businessverificationgstin;
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)
@@ -75,6 +78,14 @@ public class Business implements Serializable {
    @JsonBackReference(value = "business-pan")
     @OneToOne(mappedBy = "business",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private BusinessPan businessPan;
+
+    @OneToOne(mappedBy = "business")
+    @JsonBackReference(value = "aadhar-details")
+    private AadharDetails aadharDetails;
+
+    @JsonBackReference(value = "gstin-Details")
+    @OneToOne(mappedBy = "business")
+    private GstinDetails gstinDetails;
 
     @JsonBackReference(value = "business-incorporation")
     @OneToOne(mappedBy = "business",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
@@ -253,12 +264,28 @@ public class Business implements Serializable {
         this.identityverification = identityverification;
     }
 
-    public Integer getBusinessverification() {
-        return businessverification;
+    public Integer getBusinessverificationpan() {
+        return businessverificationpan;
     }
 
-    public void setBusinessverification(Integer businessverification) {
-        this.businessverification = businessverification;
+    public void setBusinessverificationpan(Integer businessverificationpan) {
+        this.businessverificationpan = businessverificationpan;
+    }
+
+    public Integer getBusinessverificationgstin() {
+        return businessverificationgstin;
+    }
+
+    public void setBusinessverificationgstin(Integer businessverificationgstin) {
+        this.businessverificationgstin = businessverificationgstin;
+    }
+
+    public GstinDetails getGstinDetails() {
+        return gstinDetails;
+    }
+
+    public void setGstinDetails(GstinDetails gstinDetails) {
+        this.gstinDetails = gstinDetails;
     }
 
     public Long getBusinessid() {
@@ -357,7 +384,23 @@ public class Business implements Serializable {
     public Business() {
     }
 
-   /* @Override
+    public AadharDetails getAadharDetails() {
+        return aadharDetails;
+    }
+
+    public void setAadharDetails(AadharDetails aadharDetails) {
+        this.aadharDetails = aadharDetails;
+    }
+
+    public GstinDetails getGstinDeatils() {
+        return gstinDetails;
+    }
+
+    public void setGstinDeatils(GstinDetails gstinDetails) {
+        this.gstinDetails = gstinDetails;
+    }
+
+    /* @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

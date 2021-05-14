@@ -1,24 +1,16 @@
 package fss.acquisition.merchantonboard.web.rest;
 
-import fss.acquisition.merchantonboard.domain.GstinDeatils;
+import fss.acquisition.merchantonboard.domain.GstinDetails;
 import fss.acquisition.merchantonboard.repository.GstinDeatilsRepository;
 import fss.acquisition.merchantonboard.service.GstinService;
 import fss.acquisition.merchantonboard.web.rest.errors.ResourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 
 
 @RestController
@@ -42,9 +34,9 @@ public class GstinDeatilsResource {
 
 
     @PostMapping("/gstin-deatils")
-    public String createGstinDeatils(@Valid @RequestBody GstinDeatils gstinDeatils) throws Exception {
-        log.debug("REST request to save GstinDeatils : {}", gstinDeatils);
-        String result = gstinService.createGstIn(gstinDeatils);
+    public String createGstinDeatils(@Valid @RequestBody GstinDetails gstinDetails) throws Exception {
+        log.debug("REST request to save GstinDeatils : {}", gstinDetails);
+        String result = gstinService.createGstIn(gstinDetails);
         return result;
          }
 
@@ -52,10 +44,10 @@ public class GstinDeatilsResource {
     @PutMapping("/gstin-deatils/{mid}")
     public String updateGstinDeatils(
         @PathVariable(value = "mid", required = true) final String mid,
-        @Valid @RequestBody GstinDeatils gstinDeatils
+        @Valid @RequestBody GstinDetails gstinDetails
     ) throws ResourseNotFoundException {
-        log.debug("REST request to update GstinDeatils : {}, {}", mid, gstinDeatils);
-        String result = gstinService.updateGstin(gstinDeatils);
+        log.debug("REST request to update GstinDeatils : {}, {}", mid, gstinDetails);
+        String result = gstinService.updateGstin(gstinDetails);
         return result;
     }
 
@@ -108,14 +100,14 @@ public class GstinDeatilsResource {
 
 
     @GetMapping("/gstin-deatils")
-    public List<GstinDeatils> getAllGstinDeatils() {
+    public List<GstinDetails> getAllGstinDeatils() {
         log.debug("REST request to get all GstinDeatils");
         return gstinDeatilsRepository.findAll();
     }
 
 
     @GetMapping("/gstin-deatils/{mid}")
-    public GstinDeatils getGstinDeatils(@PathVariable String mid) throws ResourseNotFoundException {
+    public GstinDetails getGstinDeatils(@PathVariable String mid) throws ResourseNotFoundException {
         log.debug("REST request to get GstinDeatils : {}", mid);
         return gstinService.getGstinDetails(mid);
     }
